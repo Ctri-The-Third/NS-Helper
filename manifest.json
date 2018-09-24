@@ -1,0 +1,35 @@
+  {
+    "name": "Netsuite cases helper",
+    "version": "0.1",
+    "description": "A tool for scraping all Cases out of Netsuite and presenting them in a more helpful fashion",
+	"permissions": ["storage", "declarativeContent", "activeTab"],
+    "background": {
+		"scripts": ["ChromeBackgroundLoader.js"],
+		"persistent": false
+    },
+	"content_scripts": 
+	[{  	
+		"matches":["https://system.na2.netsuite.com/app/center/card.nl?sc=-17*"],
+		"js": ["ChromeContentScriptLoader.js"],
+		"run_at": "document_idle",
+		"all_frames": true
+	}],
+	"web_accessible_resources": ["NSJavaScript.js","ChromeContentScriptLoader.js"],
+	
+ "page_action": {
+      "default_popup": "ChromeUI.html",
+      "default_icon": {
+        "16": "images/get_started16.png",
+        "32": "images/get_started32.png",
+        "48": "images/get_started48.png",
+        "128": "images/get_started128.png"
+      }
+    },
+    "icons": {
+      "16": "images/get_started16.png",
+      "32": "images/get_started32.png",
+      "48": "images/get_started48.png",
+      "128": "images/get_started128.png"
+    },
+    "manifest_version": 2
+  }
