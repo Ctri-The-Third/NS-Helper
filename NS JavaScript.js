@@ -3,12 +3,30 @@ var scraperRunning;
 var scraperInterval;
 var scraperOutput;
 var scraperOutputText;
+var ticketAssignee;
 function load()
 {
 	scraperRunning = "Start";
 	scraperInterval = 1000;
 	scraperOutput = new Array();
 	scraperOutputText = "";
+	scraperStartTarget = "https://system.na2.netsuite.com/app/center/card.nl?sc=-17&whence="
+	ticketAssignee = "";
+	for( i = 1; i <= 100; i++)
+	{
+		
+		try{
+		
+		ticketAssignee = document.getElementById("inpt_Case_ASSIGNED"+i).value;
+		if (ticketAssignee != "")
+		{ i = 101;}
+			console.log("Found! inpt_Case_ASSIGNED"+i);
+		}
+		catch(e)
+		{
+			
+		}
+	}
 }
 
 function parseAllPages()
@@ -84,6 +102,9 @@ function parsePage()
 			scraperOutputText += localtext + "\t";
 			
 		}
+		outputColumn.push(targetTable.rows[x],ticketAssignee);
+		scraperOutputText += ticketAssignee + "\t";
+		
 		scraperOutputText += "\n";
 		scraperOutput.push(outputColumn);
 	}
@@ -109,5 +130,6 @@ function scraperDownload(data, filename, type) {
 }
 
 load();
-parseAllPages();
+
+setTimeout(function(){parseAllPages()},scraperInterval*2);	
 
