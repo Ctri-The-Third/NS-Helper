@@ -1,2 +1,2 @@
 # NS-Helper
-Extract info from Netsuite
+Extract case info from Netsuite, and present it in a more helpful fashion.
