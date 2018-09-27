@@ -18,7 +18,8 @@
 		"scripts/NSJavaScript.js",
 		"scripts/ChromeContentScriptLoader.js",
 		"scripts/jquery-3.3.1.js",
-		"NSCHUI.html"
+		"scripts/NSUIBuilder.js",
+		"NSCHUI.html"		
 		],
 	
  "page_action": {

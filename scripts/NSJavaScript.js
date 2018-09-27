@@ -1,9 +1,10 @@
 //var script = document.createElement('script'); script.src = "https://github.com/Ctri-The-Third/NS-Helper/blob/master/NS%20JavaScript.js"; script.onload = function() {alert("Test");}; document.getElementsByTagName('head')[0].appendChild(script);
 var scraperRunning;
 var scraperInterval;
-var scraperOutput;
+var outputObject;
 var scraperOutputText;
 var ticketAssignee;
+var scraperColumns;
 function load()
 {
 	
@@ -12,6 +13,20 @@ function load()
 	scraperOutputText = "";
 	scraperStartTarget = "https://system.na2.netsuite.com/app/center/card.nl?sc=-17&whence="
 	ticketAssignee = "";
+	scraperColumns = new Array();
+	outputObject = createOutputObject();
+	//TODO: De manualify this.
+	scraperColumns[0] = "New";
+	scraperColumns[1] = "Edit | View";
+	scraperColumns[2] = "Number"
+	scraperColumns[3] = "Grab"
+	scraperColumns[4] = "Subject"
+	scraperColumns[5] = "Priority"
+	scraperColumns[6] = "Status"
+	scraperColumns[7] = "Product"
+	scraperColumns[8] = "Module"
+	scraperColumns[9] = "Abacus Type";
+	
 	for( i = 1; i <= 100; i++)
 	{
 		
@@ -61,6 +76,7 @@ function parseAllPages() //main
 			console.log("Calling for scraper shutdown");
 			
 			console.log(scraperOutputText)
+			populateUI();
 			
 			//scraperDownload(scraperOutputText, "Ticket.csv", "text");
 		}
@@ -96,11 +112,24 @@ function parsePage()
 	//header rows	
 	
 	//body
+	
 	for (x = 1; x < targetTableRowsCount -1; x++) 
 	{
+		
 		var outputColumn = new Array();
+		var scraperOutput[x] = 
+		{
+			ticketLinkID : targetTable.rows[x].cells[1], 
+			ticketNumber : targetTable.rows[x].cells[2],
+			ticketSubject : targetTable.rows[x].cells[4];
+			ticketPriority : targetTable.rows[x].cells[5];
+			ticketStatus : targetTable.rows[x].cells[6];
+		
+		
+		
 		for ( y= 0; y < targetTableColsCount; y++)
 		{
+			
 			outputColumn.push(targetTable.rows[x].cells[y].innerText);
 			//scraperOutputText += "("+x+")("+y+")";
 			//console.log("("+x+")("+y+")");
@@ -165,11 +194,14 @@ function loadUI()
 	
 	
 	ajaxrequest(document.getElementById("NSCH blob URL").value,NSCHUIdiv.id);
+	
+	
 }
 
 load();
 console.log("Successful load of NS JavaScript.");
 loadUI();
+
 
 setTimeout(function(){parseAllPages()},scraperInterval*2);	
 
