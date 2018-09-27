@@ -4,17 +4,22 @@
     "description": "A tool for scraping all Cases out of Netsuite and presenting them in a more helpful fashion",
 	"permissions": ["storage", "declarativeContent", "activeTab"],
     "background": {
-		"scripts": ["ChromeBackgroundLoader.js"],
+		"scripts": ["scripts/ChromeBackgroundLoader.js"],
 		"persistent": false
     },
 	"content_scripts": 
 	[{  	
 		"matches":["https://system.na2.netsuite.com/app/center/card.nl?sc=-17*"],
-		"js": ["ChromeContentScriptLoader.js"],
+		"js": ["scripts/ChromeContentScriptLoader.js"],
 		"run_at": "document_idle",
 		"all_frames": true
 	}],
-	"web_accessible_resources": ["NSJavaScript.js","ChromeContentScriptLoader.js"],
+	"web_accessible_resources": [
+		"scripts/NSJavaScript.js",
+		"scripts/ChromeContentScriptLoader.js",
+		"scripts/jquery-3.3.1.js",
+		"NSCHUI.html"
+		],
 	
  "page_action": {
       "default_popup": "ChromeUI.html",

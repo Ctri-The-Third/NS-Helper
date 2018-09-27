@@ -6,8 +6,8 @@ var scraperOutputText;
 var ticketAssignee;
 function load()
 {
-	scraperRunning = "Start";
-	scraperInterval = 1000;
+	
+	resetScraper();
 	scraperOutput = new Array();
 	scraperOutputText = "";
 	scraperStartTarget = "https://system.na2.netsuite.com/app/center/card.nl?sc=-17&whence="
@@ -29,7 +29,13 @@ function load()
 	}
 }
 
-function parseAllPages()
+function resetScraper()
+{
+	scraperInterval = 1000;	
+	scraperRunning = "Start";
+}
+
+function parseAllPages() //main
 {
 	console.log("scraper state:"+scraperRunning);
 	
@@ -55,6 +61,7 @@ function parseAllPages()
 			console.log("Calling for scraper shutdown");
 			
 			console.log(scraperOutputText)
+			
 			//scraperDownload(scraperOutputText, "Ticket.csv", "text");
 		}
 	}
@@ -129,12 +136,42 @@ function scraperDownload(data, filename, type) {
     }
 }
 
+function ajaxrequest(path,target)
+{
+  var appendix = Math.random();
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+     document.getElementById(target).innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET", path+"?"+appendix, true);
+  xhttp.send();
+
+}
+
+
+function loadUI()
+{
+	//
+	
+	var NSCHUIdiv= document.createElement("div")
+	NSCHUIdiv.class = "ns-portlet-wrapper ns-portlet-window-state-normal";
+	NSCHUIdiv.id = "NSCHUI"
+	
+	var target = document.getElementById("dashboard-column-2")
+	
+	target.insertBefore(NSCHUIdiv, target.firstChild);
+	
+	
+	ajaxrequest(document.getElementById("NSCH blob URL").value,NSCHUIdiv.id);
+}
+
 load();
+console.log("Successful load of NS JavaScript.");
+loadUI();
 
 setTimeout(function(){parseAllPages()},scraperInterval*2);	
-console.log("Successful load of NS JavaScript.");
-
-alert("Very invasive alert");
 
 
 //parseAllPages();
