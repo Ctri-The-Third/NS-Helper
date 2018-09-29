@@ -1,32 +1,181 @@
 //NSDataObject
-
+console.log("NSTicketObjectClass.js successfully injected");
 function createOutputObject()
 {
 	var returnObject =
 	{
-		values = [
-		systemID : "",
-		ticketID : "",
-		ticketStatus : "",
-		ticketAssignee : "",
-		ticketPriority : "",
+		values : [{
+		systemID : "0",
+		ticketID : "Ticket0",
+		ticketSubject : "Empty population",
+		ticketStatus : "Closed Dont Notify",
+		ticketAssignee : "Peter Goudie",
+		ticketPriority : "Normal",
 		ticketLastUpd : "1900-01-01",
 		ticketCusID : "54425864",
 		ticketOneLiner : "See case notes & messages",
 		triagevalue : 999
-		],
-		fSort = function ()
+		}],
+		fSort : function ()
 		{
 			//sort all values
 		},
-		fAdd = function ()
+		fAdd : function (newSystemID, newTicketID, newTicketSubject, newTicketStatus, newTicketAssignee, newTicketPriority, newTicketLastUpd, newTicketCusID, newTicketOneLiner, newTriagevalue)
 		{
+			if(this.values == undefined || this.values == [])
+			{
+					//container object is empty
+					
+					 this.values = [];
+        
+    
+			}
+			
+			var found = false;
+			var looplength = this.values.length;
+			for ( i = 0; i < looplength; i++)
+			{
+				
+				if (this.values[i] != undefined && this.values[i].systemID == newSystemID)
+				{
+					found = true;
+					console.log("Found a dupe, ID = " + this.values[i].systemID + " vs parameter " + newSystemID);
+				}
+				
+			}
+			if (!found)
+			{
+				
+				
+					this.values.push({
+					systemID : newSystemID,
+					ticketID : newTicketID,
+					ticketSubject : newTicketSubject,
+					ticketStatus : newTicketStatus,
+					ticketAssignee : newTicketAssignee,
+					ticketPriority : newTicketPriority,
+					ticketLastUpd : newTicketLastUpd,
+					ticketCusID : newTicketCusID,
+					ticketOneLiner : newTicketOneLiner,
+					triagevalue : newTriagevalue
+				});
+				
+				
+				
+				if (newTriagevalue == 999) //999 is the default untriaged value. It should be -1
+				{
+					
+					this.values[looplength].triagevalue = this.fTriage(newTicketPriority, newTicketStatus);
+					
+				}
+				looplength = looplength + 1 
+				
+			}
+	
 			//check for dupes and add
 		},
-		fTriage = function (ticketID)
+		fTriage : function (ticketID)
 		{
+			
+			for (i = 0; i < this.values.length; i++)
+			{
+				if (this.values[i].ticketID = ticketID)
+				{
+					values[i].triagevalue = fTriage(values[i].ticketPriority, values[i].ticketStatus);
+				}
+			}
 			//set the triage value based on the parameters
+		},
+		fTriage : function (tPriority, tStatus)
+		{
+			var searchstring = tStatus + "ф" + tPriority;
+			searchstring = searchstring.replace(/ /g,'');
+			var triageTable  = {
+			NotStartedфLow : 41,
+			NotStartedфNormal : 31,
+			NotStartedфHigh : 21,
+			NotStartedфUrgent : 11,
+			InProgressфLow : 42,
+			InProgressфNormal : 32,
+			InProgressфHigh : 22,
+			InProgressфUrgent : 12,
+			WithDevelopmentфLow : 44,
+			WithDevelopmentфNormal : 44,
+			WithDevelopmentфHigh : 24,
+			WithDevelopmentфUrgent : 14,
+			PendingResponseфLow : 43,
+			PendingResponseфNormal : 33,
+			PendingResponseфHigh : 23,
+			PendingResponseфUrgent : 13,
+			ResolvedфLow : 45,
+			ResolvedфNormal : 35,
+			ResolvedфHigh : 25,
+			ResolvedфUrgent : 15,
+			ClosedDontNotifyфLow : 59,
+			ClosedDontNotifyфNormal : 59,
+			ClosedDontNotifyфHigh : 59,
+			ClosedDontNotifyфUrgent : 59,
+			EscalatedфLow : 42,
+			EscalatedфNormal : 32,
+			EscalatedфHigh : 22,
+			EscalatedфUrgent : 12,
+			ClosedNotifyфLow : 59,
+			ClosedNotifyфNormal : 59,
+			ClosedNotifyфHigh : 59,
+			ClosedNotifyфUrgent : 59};
+			
+			
+			//console.log( "Triage test : " + searchstring );
+			//console.log( "Triage test : " + triageTable[searchstring] );
+			return triageTable[searchstring];
+
+			
+			
+		},
+		toString : function ()
+		{
+			return this.toString(",")
+			
+		},
+		toString : function(delimeter,id)
+		{
+		return "" + this.values.systemID + delimeter 
+		+ this.values[i].ticketID + delimeter 
+		+ this.values[i].ticketSubject + delimeter
+		+ this.values[i].ticketPriority + delimeter 
+		+ this.values[i].ticketStatus + delimeter 
+		
+		+ this.values[i].ticketAssignee + delimeter 
+		
+		+ this.values[i].ticketLastUpd + delimeter 
+		+ this.values[i].ticketCusID + delimeter
+		+ this.values[i].ticketOneLiner + delimeter
+		+ this.values[i].triagevalue + delimeter
+		},
+		compareTriageValue : function ( ticketA, ticketB ) 
+		{
+			
+		if (ticketA.triagevalue < ticketB.triagevalue)
+			return -1;
+		if (ticketA.triagevalue > ticketB.triagevalue)
+			return 1;
+		return 0;
+		},
+		sortByTriage : function ()
+		{
+			this.values.sort(this.compareTriageValue)
 		}
+		
+			
+		
+		
+		
+		
+		
+	}
+	
+	this.values = new Array();
+	return returnObject;
 		
 	
 		

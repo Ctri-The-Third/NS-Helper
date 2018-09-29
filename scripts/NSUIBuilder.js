@@ -54,15 +54,35 @@ function NSCHcreateRow(AbsID, TicketID, Subject, Priority, Status, lastUpdated, 
 
 function populateUI()
 {
+	
 	setTimeout(function ()
 	{
 		console.log("==========================================\n");
-		for (x = 0; x < scraperOutput.length; x++)
+		console.log("number of rows to create = " + outputObject.values.length);
+		
+		for (x = 0; x <  outputObject.values.length; x++)
 		{
 			var string = "";
-			console.log(x + " | " + scraperOutput.length + " | @@ " + scraperOutput[x]);
-			document.getElementById("NSCH_table").innerHTML += NSCHcreateRow(""+ (x*2), scraperOutput[x][0], "Fake subject"+x, "Normal", "In Progress", "2018-09-27", 100, x);
+			//console.log(x + " | " + outputObject.length + " | @@ " + outputObject.toString());
+			
+			/*
+			systemID : "",
+			ticketID : "",
+			ticketSubject : "",
+			ticketStatus : "",
+			ticketAssignee : "",
+			ticketPriority : "",
+			ticketLastUpd : "1900-01-01",
+			ticketCusID : "54425864",
+			ticketOneLiner : "See case notes & messages",
+			triagevalue : 999
+		}
+			*/
+			//NSCHcreateRow(AbsID, TicketID, Subject, Priority, Status, lastUpdated, UrgencyValue, rowID)
+			document.getElementById("NSCH_table").innerHTML += 
+			NSCHcreateRow(""+ outputObject.values[x].systemID, outputObject.values[x].ticketID, outputObject.values[x].ticketSubject, outputObject.values[x].ticketPriority, outputObject.values[x].ticketStatus, outputObject.values[x].ticketLastUpd, outputObject.values[x].triagevalue, x);
 		}
 		console.log("==========================================\n");
+		
 	},scraperInterval);
 }

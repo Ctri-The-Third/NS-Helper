@@ -17,6 +17,7 @@
 	"web_accessible_resources": [
 		"scripts/NSJavaScript.js",
 		"scripts/ChromeContentScriptLoader.js",
+		"scripts/NSTicketObjectClass.js",
 		"scripts/jquery-3.3.1.js",
 		"scripts/NSUIBuilder.js",
 		"NSCHUI.html"		

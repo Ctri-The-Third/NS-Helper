@@ -8,6 +8,13 @@ s.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(s);
 
 
+
+s = document.createElement('script');
+s.src = chrome.extension.getURL('scripts/NSTicketObjectClass.js');
+s.type = 'text/javascript';
+document.getElementsByTagName('head')[0].appendChild(s);
+
+
 s = document.createElement('script');
 s.src = chrome.extension.getURL('scripts/NSJavaScript.js');
 s.type = 'text/javascript';
@@ -19,10 +26,7 @@ s.src = chrome.extension.getURL('scripts/NSUIBuilder.js');
 s.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(s);
 
-s = document.createElement('script');
-s.src = chrome.extension.getURL('scripts/NSTicketObjectClass.js');
-s.type = 'text/javascript';
-document.getElementsByTagName('head')[0].appendChild(s);
+
 
 
 

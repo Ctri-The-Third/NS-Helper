@@ -7,14 +7,14 @@ var ticketAssignee;
 var scraperColumns;
 function load()
 {
-	
+	outputObject = createOutputObject();
 	resetScraper();
-	scraperOutput = new Array();
+	
 	scraperOutputText = "";
 	scraperStartTarget = "https://system.na2.netsuite.com/app/center/card.nl?sc=-17&whence="
 	ticketAssignee = "";
 	scraperColumns = new Array();
-	outputObject = createOutputObject();
+	
 	//TODO: De manualify this.
 	scraperColumns[0] = "New";
 	scraperColumns[1] = "Edit | View";
@@ -52,7 +52,7 @@ function resetScraper()
 
 function parseAllPages() //main
 {
-	console.log("scraper state:"+scraperRunning);
+	console.log("scraper state:"+scraperRunning +", number of captured tickets = " + outputObject.values.length);
 	
 	if (scraperRunning == "Start") //first run, set to page 0 and begin.
 	{
@@ -73,11 +73,13 @@ function parseAllPages() //main
 		else
 		{
 			scraperRunning = "Complete";
-			console.log("Calling for scraper shutdown");
-			
-			console.log(scraperOutputText)
+			console.log("Calling for scraper shutdown number of values = " + outputObject.values.length);
+			//console.log(scraperOutputText)
+			outputObject.sortByTriage();
+			console.log("Completed sort, number of values = " + outputObject.values.length);
 			populateUI();
-			
+			var myJsonString = JSON.stringify(outputObject.values);
+			console.log(myJsonString);
 			//scraperDownload(scraperOutputText, "Ticket.csv", "text");
 		}
 	}
@@ -87,15 +89,15 @@ function pageLoadCompleteHandler(outputLength)
 {
 	var result = false;
 	var max = parseInt(document.getElementById("totallinkneg706").innerHTML);
-	if ( (scraperOutput.length * 2) < (max*2 ))
+	if ( (outputObject.values.length * 2) < (max*2 ))
 	{
 		result = true;
-		console.log("Found target of " + max+ " versus length of " +  scraperOutput.length + ". Needs more! returning " + result);
+		console.log("Found target of " + max+ " versus length of " +  outputObject.values.length + ". Needs more! returning " + result);
 	}
 	else
 	{
 		result = false;
-		console.log("Found target of " + max+ " versus length of " +  scraperOutput.length + ", Enough/ too many! returning " + result);
+		console.log("Found target of " + max+ " versus length of " +  outputObject.values.length + ", Enough/ too many! returning " + result);
 	}
 	
 	return result;
@@ -117,32 +119,29 @@ function parsePage()
 	{
 		
 		var outputColumn = new Array();
-		var scraperOutput[x] = 
-		{
-			ticketLinkID : targetTable.rows[x].cells[1], 
-			ticketNumber : targetTable.rows[x].cells[2],
-			ticketSubject : targetTable.rows[x].cells[4];
-			ticketPriority : targetTable.rows[x].cells[5];
-			ticketStatus : targetTable.rows[x].cells[6];
+		//(systemID, ticketID, ticketSubject, ticketStatus, ticketAssignee, ticketPriority, ticketLastUpd, ticketCusID, ticketOneLiner, triagevalue)
 		
-		
-		
-		for ( y= 0; y < targetTableColsCount; y++)
-		{
 			
-			outputColumn.push(targetTable.rows[x].cells[y].innerText);
-			//scraperOutputText += "("+x+")("+y+")";
-			//console.log("("+x+")("+y+")");
-			var localtext = targetTable.rows[x].cells[y].innerText;
-			localtext = localtext.replace("Â", " ");
-			scraperOutputText += localtext + "\t";
 			
-		}
+			
+		outputObject.fAdd(
+		Math.random(), //systemID
+		targetTable.rows[x].cells[2].innerText, //ticketID
+		targetTable.rows[x].cells[4].innerText, //ticketSubject = 
+		
+		targetTable.rows[x].cells[6].innerText, //ticketStatus =
+		ticketAssignee,
+		targetTable.rows[x].cells[5].innerText, //ticketPriority =
+		"1900-01-01",
+		"0","", 999);
+		
+	
+		
 		outputColumn.push(targetTable.rows[x],ticketAssignee);
-		scraperOutputText += ticketAssignee + "\t";
+		//scraperOutputText += ticketAssignee + "\t";
 		
 		scraperOutputText += "\n";
-		scraperOutput.push(outputColumn);
+		
 	}
 	//console.log(scraperOutputText);
 }
