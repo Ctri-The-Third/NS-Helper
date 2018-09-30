@@ -1,0 +1,18 @@
+#NSCHUI_loading_wrapper
+{
+	margin-left:5px;
+	width:100px;
+	height:20px;
+	border:1px solid black;
+	text-align:center;
+}
+
+#NSCHUI_loading_bar
+{
+  width: 1%;
+  height: 100%;
+  background-color: red;
+  text-align: center;
+  line-height: 30px;
+  color: white;
+}

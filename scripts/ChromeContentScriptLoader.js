@@ -21,6 +21,15 @@ s.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(s);
 
 
+// <LINK href="special.css" rel="stylesheet" type="text/css">
+s = document.createElement('link');
+s.href = chrome.extension.getURL('CSS/NSCHUI.css');
+s.rel = "stylesheet";
+s.type = 'text/CSS';
+document.getElementsByTagName('head')[0].appendChild(s);
+
+
+
 s = document.createElement('script');
 s.src = chrome.extension.getURL('scripts/NSUIBuilder.js');
 s.type = 'text/javascript';

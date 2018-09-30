@@ -5,16 +5,17 @@ X1. Figure out how to make this run without reliance on Console
 
 X2. Create on-screen display of existing information
    Xa. display ticket information
-   b. scrape ticket's system ID
-   c. create direct link to ticket 
-3. Loading bar, click to run parse.
-3. Saving & Loading of state to Google Storage    
-4. "Update" ticket 
-3. click - to - load an individual ticket's info and extra "last updated", and "customer", and "assignee"
+   Xb. scrape ticket's system ID
+   Xc. create direct link to ticket 
+X3. Loading bar, 
+4. click to run parse.
+5. Saving & Loading of state to Google Storage    
+X6. "Update" ticket 
+7. click - to - load an individual ticket's info and extra "last updated", and "customer", and "assignee"
    a. background loading
 
 
-6. auot-load issues for other support users.
+8. auot-load issues for other support users.
 
 
 @ auto-grab column headers

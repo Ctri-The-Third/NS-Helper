@@ -83,6 +83,13 @@ function populateUI()
 			NSCHcreateRow(""+ outputObject.values[x].systemID, outputObject.values[x].ticketID, outputObject.values[x].ticketSubject, outputObject.values[x].ticketPriority, outputObject.values[x].ticketStatus, outputObject.values[x].ticketLastUpd, outputObject.values[x].triagevalue, x);
 		}
 		console.log("==========================================\n");
-		
+		updateProgressBar(100,"green");
 	},scraperInterval);
+}
+
+function updateProgressBar(percent,colour)
+{
+	var target = 	document.getElementById("NSCHUI_loading_bar");
+	target.style.width = percent+"%"
+	target.style.backgroundColor = colour;
 }

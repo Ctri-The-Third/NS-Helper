@@ -20,6 +20,7 @@
 		"scripts/NSTicketObjectClass.js",
 		"scripts/jquery-3.3.1.js",
 		"scripts/NSUIBuilder.js",
+		"CSS/NSCHUI.css",
 		"NSCHUI.html"		
 		],
 	

@@ -5,8 +5,10 @@ var outputObject;
 var scraperOutputText;
 var ticketAssignee;
 var scraperColumns;
+console.log("NSJavaScript.js successfully injected");
 function load()
 {
+	
 	outputObject = createOutputObject();
 	resetScraper();
 	
@@ -93,11 +95,13 @@ function pageLoadCompleteHandler(outputLength)
 	{
 		result = true;
 		console.log("Found target of " + max+ " versus length of " +  outputObject.values.length + ". Needs more! returning " + result);
+		updateProgressBar((outputObject.values.length/max)*100,"#884");
 	}
 	else
 	{
 		result = false;
 		console.log("Found target of " + max+ " versus length of " +  outputObject.values.length + ", Enough/ too many! returning " + result);
+		updateProgressBar(100,"884");
 	}
 	
 	return result;
@@ -121,11 +125,16 @@ function parsePage()
 		var outputColumn = new Array();
 		//(systemID, ticketID, ticketSubject, ticketStatus, ticketAssignee, ticketPriority, ticketLastUpd, ticketCusID, ticketOneLiner, triagevalue)
 		
-			
-			
+		var linkRegex = /supportcase.nl\?id=[1-9]+/g;
+		var linkRegex2 = /[1-9]+/g
+		
+
+		var systemLink = targetTable.rows[x].cells[2].innerHTML;	
+		systemLink = linkRegex.exec(systemLink);
+		systemLink = linkRegex2.exec (systemLink);
 			
 		outputObject.fAdd(
-		Math.random(), //systemID
+		systemLink, //systemID
 		targetTable.rows[x].cells[2].innerText, //ticketID
 		targetTable.rows[x].cells[4].innerText, //ticketSubject = 
 		
@@ -135,7 +144,7 @@ function parsePage()
 		"1900-01-01",
 		"0","", 999);
 		
-	
+		
 		
 		outputColumn.push(targetTable.rows[x],ticketAssignee);
 		//scraperOutputText += ticketAssignee + "\t";
@@ -201,7 +210,7 @@ load();
 console.log("Successful load of NS JavaScript.");
 loadUI();
 
-
+setTimeout(function(){updateProgressBar(1,"#884")},scraperInterval);
 setTimeout(function(){parseAllPages()},scraperInterval*2);	
 
 

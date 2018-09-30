@@ -40,6 +40,18 @@ function createOutputObject()
 				{
 					found = true;
 					console.log("Found a dupe, ID = " + this.values[i].systemID + " vs parameter " + newSystemID);
+					
+					this.values[i].ticketID = newTicketID
+					this.values[i].ticketSubject = newTicketSubject
+					this.values[i].ticketStatus   = newTicketStatus
+					this.values[i].ticketAssignee   = newTicketAssignee
+					this.values[i].ticketPriority   = newTicketPriority
+					
+					//this.values[i].ticketLastUpd   = 
+					//this.values[i].ticketCusID   = 
+					//this.values[i].ticketOneLiner   = 
+					//this.values[i].triagevalue   = 
+					
 				}
 				
 			}
