@@ -40,8 +40,8 @@ function NSCHcreateRow(AbsID, TicketID, Subject, Priority, Status, lastUpdated, 
 	htmlString += '<td valign="top" class="xxportlettext" style=""><a style="visibility:hidden" id="scrollid'+AbsID+'"></a><span id="lstinlnNSXX_0_1" class="listEditSpan" ntv_val="2" rec_key="'+AbsID+'">'+Priority+'</span></td>'
 
 	//status
-	htmlString += '<td valign="top" class="xxportlettext" style=""><a style="visibility:hidden" id="scrollid'+AbsID+'"></a><span id="lstinlnNSXX_0_2" class="listEditSpan" ntv_val="11" rec_key="'+AbsID+'">'+Status+'</span></td>'
-
+	htmlString += '<td valign="top" class="xxportlettext" style=""><a onclick = "UpdateDate('+AbsID+')">'+lastUpdated+'</a></td>'
+	
 	htmlString += '</tr>';
 
 
@@ -57,6 +57,7 @@ function populateUI()
 	
 	setTimeout(function ()
 	{
+		document.getElementById("NSCH_table").innerHTML = "";
 		console.log("==========================================\n");
 		console.log("number of rows to create = " + outputObject.values.length);
 		

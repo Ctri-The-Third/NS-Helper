@@ -5,6 +5,7 @@ var outputObject;
 var scraperOutputText;
 var ticketAssignee;
 var scraperColumns;
+var dbg = false;
 console.log("NSJavaScript.js successfully injected");
 function load()
 {
@@ -76,13 +77,17 @@ function parseAllPages() //main
 		{
 			scraperRunning = "Complete";
 			console.log("Calling for scraper shutdown number of values = " + outputObject.values.length);
-			//console.log(scraperOutputText)
-			outputObject.sortByTriage();
+			
+			outputObject.fSortByTriage();
 			console.log("Completed sort, number of values = " + outputObject.values.length);
+			
 			populateUI();
+			
+			
 			var myJsonString = JSON.stringify(outputObject.values);
-			console.log(myJsonString);
+			//console.log(myJsonString);
 			//scraperDownload(scraperOutputText, "Ticket.csv", "text");
+			
 		}
 	}
 }
@@ -141,7 +146,7 @@ function parsePage()
 		targetTable.rows[x].cells[6].innerText, //ticketStatus =
 		ticketAssignee,
 		targetTable.rows[x].cells[5].innerText, //ticketPriority =
-		"1900-01-01",
+		"1900-01-01 00:01",
 		"0","", 999);
 		
 		
@@ -206,6 +211,21 @@ function loadUI()
 	
 }
 
+
+function UpdateDate(SystemID)
+{
+	outputObject.fUpdateDate(SystemID);
+	outputObject.fSortByTriage();
+	populateUI();
+	save();
+}
+
+function save()
+{
+	
+	document.getElementById("NSCHUISaveValue") = JSON.stringify(outputObject.values);
+	
+}
 load();
 console.log("Successful load of NS JavaScript.");
 loadUI();

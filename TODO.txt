@@ -8,9 +8,9 @@ X2. Create on-screen display of existing information
    Xb. scrape ticket's system ID
    Xc. create direct link to ticket 
 X3. Loading bar, 
-4. click to run parse.
+X4. click to run parse.
 5. Saving & Loading of state to Google Storage    
-X6. "Update" ticket 
+X6. "Update" individual ticket's info
 7. click - to - load an individual ticket's info and extra "last updated", and "customer", and "assignee"
    a. background loading
 

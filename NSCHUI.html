@@ -1,3 +1,4 @@
+<input type = hidden value = "" id = "NSCHUISaveValue"/>
 <div class="ns-portlet-wrapper ns-portlet-window-state-normal" >
     <div class="ns-portlet-header ui-sortable-handle" tabindex="0" >
 			
@@ -20,8 +21,8 @@
 		<tbody><tr>
 			<td>
 				<div class="uir-portlet-list-filter-field"> 
-					<button onclick="resetScraper(); parseAllPages();"> Scan </button>
-					
+					<input class = "NSCHUI_button" type = "button" value = "Scan" onclick="resetScraper(); parseAllPages();" />
+					<!--  -->
 				</div>
 
 
@@ -29,6 +30,10 @@
 			<td>
 			<div id = "NSCHUI_loading_wrapper" class = "uir-field-wrapper NSCHUI_loading_wrapper" >
 				<div id = "NSCHUI_loading_bar" class = "NSCHUI_loading_bar" style = "color:red; width:100%;">		
+				</div>
+			</div>
+			<div class="uir-portlet-list-filter-field"> 
+				<input class = "NSCHUI_button" type = "button" value = "re-triage" onclick="triageAll()" />
 				</div>
 			</div>
 			</td>

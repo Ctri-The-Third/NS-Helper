@@ -36,9 +36,10 @@ function createOutputObject()
 			for ( i = 0; i < looplength; i++)
 			{
 				
-				if (this.values[i] != undefined && this.values[i].systemID == newSystemID)
+				//console.log("testing: " + this.values[i].systemID + " vs " + newSystemID);
+				if (this.values[i] != undefined && this.values[i].systemID == ""+ newSystemID)
 				{
-					found = true;
+					//found = true;
 					console.log("Found a dupe, ID = " + this.values[i].systemID + " vs parameter " + newSystemID);
 					
 					this.values[i].ticketID = newTicketID
@@ -86,12 +87,12 @@ function createOutputObject()
 	
 			//check for dupes and add
 		},
-		fTriage : function (ticketID)
+		fTriage : function (systemID)
 		{
 			
 			for (i = 0; i < this.values.length; i++)
 			{
-				if (this.values[i].ticketID = ticketID)
+				if (this.values[i].systemID == systemID)
 				{
 					values[i].triagevalue = fTriage(values[i].ticketPriority, values[i].ticketStatus);
 				}
@@ -171,11 +172,39 @@ function createOutputObject()
 			return -1;
 		if (ticketA.triagevalue > ticketB.triagevalue)
 			return 1;
+		if (ticketA.ticketID < ticketB.ticketID)
+			return -1;
+		if (ticketA.ticketID > ticketB.ticketID)
+			return 1;
 		return 0;
 		},
-		sortByTriage : function ()
+		fSortByTriage : function ()
 		{
 			this.values.sort(this.compareTriageValue)
+		},
+		fUpdateDate : function  (systemID)
+		{
+			var found = false;
+			for (i = 0; i < this.values.length; i++)
+			{
+				if (this.values[i].systemID + "" == systemID + "")
+				{
+					
+					var today = new Date();
+					var dateString = today.getUTCFullYear() + "-" + today.getUTCMonth()+"-" +today.getUTCDate()+ " ";
+					dateString += today.getUTCHours() <10 ? "0"+ today.getUTCHours() : today.getUTCHours();
+					dateString += today.getUTCMinutes() <10 ? "0"+ today.getUTCMinutes() : today.getUTCMinutes();
+					
+					this.values[i].ticketLastUpd =  dateString;
+					this.fTriage(systemID);
+					
+					console.log("Found "+this.values[i].ticketID+", updated date to" + this.values[i].ticketLastUpd);
+					
+				}
+				
+					
+			}
+		
 		}
 		
 			
@@ -185,7 +214,7 @@ function createOutputObject()
 		
 		
 	}
-	
+
 	this.values = new Array();
 	return returnObject;
 		
