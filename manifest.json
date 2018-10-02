@@ -10,7 +10,7 @@
 	"content_scripts": 
 	[{  	
 		"matches":["https://system.na2.netsuite.com/app/center/card.nl?sc=-17*"],
-		"js": ["`/ChromeContentScriptLoader.js"],
+		"js": ["scripts/ChromeContentScriptLoader.js"],
 		"run_at": "document_idle",
 		"all_frames": true
 	}],
@@ -21,10 +21,9 @@
 		"scripts/jquery-3.3.1.js",
 		"scripts/NSUIBuilder.js",
 		"CSS/NSCHUI.css",
-		"NSCHUI.html"		
-		],
+		"NSCHUI.html"],
 	
- "page_action": {
+	"page_action": {
       "default_popup": "ChromeUI.html",
       "default_icon": {
         "16": "images/get_started16.png",

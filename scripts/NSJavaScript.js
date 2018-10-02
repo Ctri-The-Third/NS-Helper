@@ -6,13 +6,22 @@ var scraperOutputText;
 var ticketAssignee;
 var scraperColumns;
 var dbg = false;
+var extensionID;
 console.log("NSJavaScript.js successfully injected");
 function load()
 {
 	
 	outputObject = createOutputObject();
-	resetScraper();
 	
+	var JSONElement = document.getElementById("NSCHUIJson");
+	if (JSONElement != undefined)
+	{
+		console.log("Trying to parse JSON into legit object");
+		outputObject.values = JSON.parse(JSONElement.value);
+	}
+	else {console.log("JSON load failed, couldn't find element");}
+	resetScraper();
+	extensionID = "occmhpdkmpdgabnmdjnjhnifmdimeeoo"; //TODO - inject this from the plugin, make it self aware.
 	scraperOutputText = "";
 	scraperStartTarget = "https://system.na2.netsuite.com/app/center/card.nl?sc=-17&whence="
 	ticketAssignee = "";
@@ -222,8 +231,18 @@ function UpdateDate(SystemID)
 
 function save()
 {
+	console.log("DBG: entered save");
+	var data= JSON.stringify(outputObject.values);
+	document.getElementById("NSCHUISaveValue").value = data;
 	
-	document.getElementById("NSCHUISaveValue") = JSON.stringify(outputObject.values);
+	
+
+// updated: this works with Chrome 30:
+	var evt=document.createEvent("NSCHUI_save");
+evt.initCustomEvent("NSCHUI_save", true, true, data);
+document.dispatchEvent(evt);
+
+
 	
 }
 load();
@@ -232,6 +251,7 @@ loadUI();
 
 setTimeout(function(){updateProgressBar(1,"#884")},scraperInterval);
 setTimeout(function(){parseAllPages()},scraperInterval*2);	
+
 
 
 //parseAllPages();

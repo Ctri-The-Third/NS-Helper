@@ -1,4 +1,4 @@
-<input type = hidden value = "" id = "NSCHUISaveValue"/>
+
 <div class="ns-portlet-wrapper ns-portlet-window-state-normal" >
     <div class="ns-portlet-header ui-sortable-handle" tabindex="0" >
 			
@@ -45,7 +45,7 @@
 <script>
 window.phoneformat ='123-456-7890';
 </script>
-<table id="NSCH_table" border="0" cellspacing="0" class="listtable listborder openList uir-list-table" cellpadding="0" width="100%">
+<table  border="0" cellspacing="0" class="listtable listborder openList uir-list-table" cellpadding="0" width="100%">
 <thead>
 <tr class="uir-list-headerrow noprint">
 <td height="100%" id="div__lab2" nowrap="" class="listheadertd listheadertextb uir-list-header-td uir-list-header-align-ctr" data-label="Edit | View"><div class="listheader">Link</div></td> 
@@ -58,66 +58,20 @@ window.phoneformat ='123-456-7890';
 
 <td height="100%" style="cursor:pointer;" id="div__lab7" nowrap="" class="listheadertd listheadertextb uir-list-header-td" onclick="doServerSortneg706 ('Case_STATUS_raw');return false;" data-label="Status"><div class="listheader"><span class="uir-label-no-required-flag" id="status_fs_lbl">Status</span><span id="neg706dir6" class="listheadersort"></span><img class="uir-dle-icon" src="/images/hover/icon_dle.png?v=2018.2.0" alt="This column is editable" border="0" style="vertical-align:middle;" title="This column is editable">&nbsp;</div></td> 
 
+<td height="100%" style="cursor:pointer;" id="div__lab8" nowrap="" class="listheadertd listheadertextb uir-list-header-td" onclick="" data-label="LastUpdate"><div class="listheader"><span class="uir-label-no-required-flag" id="status_fs_lbl">Last Updated</span><span id="neg706dir6" class="listheadersort"></span></div></td> 
+
 </tr>
 </thead>
 
-<tbody>
+<tbody id = "NSCH_table">
 
 
 
 
 
 
-<script language="Javascript">
-function quickfind_anchor_click() {
-var qfDiv = document.getElementById('uir-quickfind-box');
-var qfImg = document.getElementById('quickfind-image');
-var qfFld = document.getElementById('quickfind-field');
-qfDiv.style.left=qfImg.offsetWidth
-qfDiv.style.top=qfImg.offsetHeight;
-qfDiv.style.visibility='visible';
-qfFld.value='';
-qfFld.focus();
-}
-function quickfind_div_click(evnt) {
-var evnt = getEvent(evnt);
-if (getEventTarget(evnt) == this)
-    this.style.visibility='hidden';
-}
-function quickfind_field_keypress(evnt,qfFld) {
-if(getEventKeypress(evnt)==13) { 
-qfFld.blur(evnt);
-evnt.cancelBubble = true;
-if (qfFld.value.length > 0) document.getElementById('quickfind_btn').click(evnt);
-return false;
-} else if (getEventKeypress(evnt)==27) qfFld.blur(evnt);
-return true;
-}
-function quickfind_field_blur() {
-window.hideQuickFindTimer = setTimeout("document.getElementById('quickfind_div').style.visibility='hidden'; window.hideQuickFindTimer=null;", 250);
-}
-function quickfind_field_focus() {
-if (window.hideQuickFindTimer){
-clearTimeout(window.hideQuickFindTimer)
-window.hideQuickFindTimer = null;
-}
-}
-function doQuickFind(val,recordtype) {
-window.location='/app/common/search/searchresults.nl?searchtype=Case&quicksearch=T&Case_NUMBERtype=STARTSWITH&Case_NUMBER='+encodeURIComponent(val)+'&frame=be';
-}
-</script>
 </tbody></table>
-<script>
-parent.lstinlnneg706 = new Array();
-parent.lstinlnneg706[0] = new parent.NLExtremeEditField(0,'title','text', true, "this.isvalid = validate_field(this,'text',true,false,null,null,false); if (this.isvalid == true) { return true; } else { return false; }", "null");
-parent.lstinlnneg706[0].setResetDivs(false);
-parent.lstinlnneg706[1] = new parent.NLExtremeEditField(1,'priority','select',true,null);
-parent.lstinlnneg706[1].setResetDivs(false);
-parent.lstinlnneg706[2] = new parent.NLExtremeEditField(2,'status','select',true,null);
-parent.lstinlnneg706[2].setResetDivs(false);
-parent.listEditFields['lstinlnneg706'] = parent.lstinlnneg706;
 
-</script>
 
 
 
