@@ -68,9 +68,10 @@ s.id = "NSCHUISaveValue";
 document.getElementsByTagName('body')[0].appendChild(s);
 
 
-chrome.storage.local.get(['NSCHUIJson'], function(result) {
-			console.log("We have fetched JSON. Success unknown.");
-           document.getElementById("NSCHUISaveValue").value = result.NSCHUIJson;
+	chrome.storage.local.get(['NSCHJson'], function(result) {
+		console.log("We have fetched JSON. Success unknown.");
+		console.log(result.NSCHUIJson);
+          document.getElementById("NSCHUISaveValue").value = result.NSCHJson;
         });
 
 document.getElementById("ns-dashboard-heading-panel").innerHTML="<h1 style = 'color:#afa;'>Cases</h1>"
@@ -81,11 +82,7 @@ success: function(result){
 }}); //*/
 
 
-document.addEventListener('yourCustomEvent', function (e)
-{
-  var data=e.detail;
-  console.log("received "+data);
-});
+
 
 
 function chromeSave()

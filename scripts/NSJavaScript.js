@@ -5,19 +5,30 @@ var outputObject;
 var scraperOutputText;
 var ticketAssignee;
 var scraperColumns;
+var scraperPosition;
 var dbg = false;
 var extensionID;
+var perPage;
 console.log("NSJavaScript.js successfully injected");
 function load()
 {
 	
 	outputObject = createOutputObject();
 	
-	var JSONElement = document.getElementById("NSCHUIJson");
+	var JSONElement = document.getElementById("NSCHUISaveValue");
 	if (JSONElement != undefined)
 	{
 		console.log("Trying to parse JSON into legit object");
-		outputObject.values = JSON.parse(JSONElement.value);
+		console.log(JSONElement.value);
+		try
+		{
+			outputObject.values = JSON.parse(JSONElement.value);
+			outputObject.fSortByTriage();
+		}
+		catch (e)
+		{
+			console.log(e.message);
+		}
 	}
 	else {console.log("JSON load failed, couldn't find element");}
 	resetScraper();
@@ -26,6 +37,10 @@ function load()
 	scraperStartTarget = "https://system.na2.netsuite.com/app/center/card.nl?sc=-17&whence="
 	ticketAssignee = "";
 	scraperColumns = new Array();
+	perPage = 20;
+	
+
+
 	
 	//TODO: De manualify this.
 	scraperColumns[0] = "New";
@@ -54,20 +69,23 @@ function load()
 			
 		}
 	}
+	
 }
 
 function resetScraper()
 {
-	scraperInterval = 1000;	
+	scraperInterval = 2000;	
 	scraperRunning = "Start";
+	scraperPosition = 0;
 }
 
 function parseAllPages() //main
 {
-	console.log("scraper state:"+scraperRunning +", number of captured tickets = " + outputObject.values.length);
+	console.log("scraper state:"+scraperRunning +", number of captured tickets = " + outputObject.values.length + ", and current position is " + scraperPosition);
 	
 	if (scraperRunning == "Start") //first run, set to page 0 and begin.
 	{
+		scraperPosition += perPage;
 		NS.UI.Helpers.uir_paginationSelectHelper.onPaginationChange(NS.jQuery(document.getElementsByClassName("uir-pagination-select-wrapper")), 0);
 		setTimeout(function(){scraperRunning="Active";parseAllPages()},scraperInterval);	
 	}
@@ -79,13 +97,14 @@ function parseAllPages() //main
 		
 		if (pageLoadCompleteHandler() == true)
 		{
+			scraperPosition += perPage;	
 			scraperRunning = "Active";
 			setTimeout(function(){parseAllPages()},scraperInterval);	
 		}
 		else
 		{
 			scraperRunning = "Complete";
-			console.log("Calling for scraper shutdown number of values = " + outputObject.values.length);
+			console.log("Calling for scraper shutdown number of values = " + outputObject.values.length + "position = " + scraperPosition);
 			
 			outputObject.fSortByTriage();
 			console.log("Completed sort, number of values = " + outputObject.values.length);
@@ -101,15 +120,15 @@ function parseAllPages() //main
 	}
 }
 
-function pageLoadCompleteHandler(outputLength)
+function pageLoadCompleteHandler()
 {
 	var result = false;
 	var max = parseInt(document.getElementById("totallinkneg706").innerHTML);
-	if ( (outputObject.values.length * 2) < (max*2 ))
+	if ( (scraperPosition * 2) < (max*2 ))
 	{
 		result = true;
 		console.log("Found target of " + max+ " versus length of " +  outputObject.values.length + ". Needs more! returning " + result);
-		updateProgressBar((outputObject.values.length/max)*100,"#884");
+		updateProgressBar((scraperPosition/max)*100,"#884");
 	}
 	else
 	{
@@ -139,13 +158,18 @@ function parsePage()
 		var outputColumn = new Array();
 		//(systemID, ticketID, ticketSubject, ticketStatus, ticketAssignee, ticketPriority, ticketLastUpd, ticketCusID, ticketOneLiner, triagevalue)
 		
-		var linkRegex = /supportcase.nl\?id=[1-9]+/g;
-		var linkRegex2 = /[1-9]+/g
+		var linkRegex = /supportcase.nl\?id=[0-9]+/g;
+		var linkRegex2 = /[0-9]+/g;
+		
 		
 
 		var systemLink = targetTable.rows[x].cells[2].innerHTML;	
+		
+		//console.log("Stripping stage 0: " + systemLink);
 		systemLink = linkRegex.exec(systemLink);
+		//console.log("Stripping stage 1: " + systemLink);
 		systemLink = linkRegex2.exec (systemLink);
+		//console.log("Stripping stage 2: " + systemLink);
 			
 		outputObject.fAdd(
 		systemLink, //systemID
@@ -187,7 +211,7 @@ function scraperDownload(data, filename, type) {
     }
 }
 
-function ajaxrequest(path,target)
+function ajaxrequest(path,target,onsuccess)
 {
   var appendix = Math.random();
   var xhttp = new XMLHttpRequest();
@@ -195,6 +219,7 @@ function ajaxrequest(path,target)
     if (this.readyState == 4 && this.status == 200) {
      document.getElementById(target).innerHTML = this.responseText;
     }
+	onsuccess();
   };
   xhttp.open("GET", path+"?"+appendix, true);
   xhttp.send();
@@ -215,7 +240,7 @@ function loadUI()
 	target.insertBefore(NSCHUIdiv, target.firstChild);
 	
 	
-	ajaxrequest(document.getElementById("NSCH blob URL").value,NSCHUIdiv.id);
+	ajaxrequest(document.getElementById("NSCH blob URL").value,NSCHUIdiv.id,function(){populateUI();});
 	
 	
 }
@@ -229,21 +254,34 @@ function UpdateDate(SystemID)
 	save();
 }
 
+
+
+
+function purgeCache()
+{
+	outputObject.values = [];
+	populateUI();
+chrome.runtime.sendMessage(extensionID, {values: ""},
+  function(response) {
+    if (!response.success)
+      handleError(url);
+  });
+}
+
 function save()
 {
-	console.log("DBG: entered save");
-	var data= JSON.stringify(outputObject.values);
-	document.getElementById("NSCHUISaveValue").value = data;
 	
-	
+chrome.runtime.sendMessage(extensionID, {values: outputObject.values},
+  function(response) {
+    if (!response.success)
+      handleError(url);
+  });
+}
 
-// updated: this works with Chrome 30:
-	var evt=document.createEvent("NSCHUI_save");
-evt.initCustomEvent("NSCHUI_save", true, true, data);
-document.dispatchEvent(evt);
-
-
-	
+function triageAll()
+{
+	outputObject.fTriageAll();
+	populateUI();
 }
 load();
 console.log("Successful load of NS JavaScript.");
@@ -251,6 +289,7 @@ loadUI();
 
 setTimeout(function(){updateProgressBar(1,"#884")},scraperInterval);
 setTimeout(function(){parseAllPages()},scraperInterval*2);	
+
 
 
 

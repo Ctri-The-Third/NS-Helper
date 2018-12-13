@@ -14,6 +14,9 @@
 		"run_at": "document_idle",
 		"all_frames": true
 	}],
+	"externally_connectable" : {
+		"matches" : ["https://system.na2.netsuite.com/app/center/card.nl?sc=-17*"]
+	},
 	"web_accessible_resources": [
 		"scripts/NSJavaScript.js",
 		"scripts/ChromeContentScriptLoader.js",

@@ -32,3 +32,27 @@ console.log("Successful hit of ChromeLoader.js");
   
   
   
+  
+  chrome.runtime.onMessageExternal.addListener(
+  function(request, sender, sendResponse) {
+	  //console.log("SUCCESS");
+	  
+	  chrome.storage.local.set({"NSCHJson" : JSON.stringify(request.values)});
+	  //console.log(request.values);
+	  
+	  //console.log(sender);
+	  
+	      
+		chrome.storage.local.get('NSCHJson', function (result) {
+        console.log("Info now stored in storage.local: ");
+        console.log(typeof result.NSCHJson);
+		console.log(result.NSCHJson);});
+      
+	  
+    //if (sender.url == blocklistedWebsite)
+//      return;  // don't allow this web page access
+    //if (request.openUrlInEditor)
+//      openUrl(request.openUrlInEditor);
+
+	
+  });

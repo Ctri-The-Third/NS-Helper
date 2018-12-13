@@ -4,7 +4,7 @@ function createOutputObject()
 {
 	var returnObject =
 	{
-		values : [{
+		values : [/*{
 		systemID : "0",
 		ticketID : "Ticket0",
 		ticketSubject : "Empty population",
@@ -15,7 +15,7 @@ function createOutputObject()
 		ticketCusID : "54425864",
 		ticketOneLiner : "See case notes & messages",
 		triagevalue : 999
-		}],
+		}*/],
 		fSort : function ()
 		{
 			//sort all values
@@ -39,8 +39,8 @@ function createOutputObject()
 				//console.log("testing: " + this.values[i].systemID + " vs " + newSystemID);
 				if (this.values[i] != undefined && this.values[i].systemID == ""+ newSystemID)
 				{
-					//found = true;
-					console.log("Found a dupe, ID = " + this.values[i].systemID + " vs parameter " + newSystemID);
+					found = true;
+					//console.log("Found a dupe, ID = " + this.values[i].systemID + " vs parameter " + newSystemID+", status "+this.values[i].ticketStatus +" vs "+ newTicketStatus);
 					
 					this.values[i].ticketID = newTicketID
 					this.values[i].ticketSubject = newTicketSubject
@@ -52,7 +52,8 @@ function createOutputObject()
 					//this.values[i].ticketCusID   = 
 					//this.values[i].ticketOneLiner   = 
 					//this.values[i].triagevalue   = 
-					
+					console.log("DBG: "+newSystemID+" Triaging an existing value, with the date "+ this.values[i].ticketLastUpd) ;
+					this.values[i].triagevalue = this.fTriage(newTicketPriority, newTicketStatus,this.values[i].ticketLastUpd)
 				}
 				
 			}
@@ -78,7 +79,8 @@ function createOutputObject()
 				if (newTriagevalue == 999) //999 is the default untriaged value. It should be -1
 				{
 					
-					this.values[looplength].triagevalue = this.fTriage(newTicketPriority, newTicketStatus);
+					console.log("DBG: Triaging a 999 value");
+					this.values[looplength].triagevalue = this.fTriage(newTicketPriority, newTicketStatus, newTicketLastUpd);
 					
 				}
 				looplength = looplength + 1 
@@ -87,22 +89,43 @@ function createOutputObject()
 	
 			//check for dupes and add
 		},
-		fTriage : function (systemID)
+		fTriageAll : function ()
+		{
+			console.log("DBG: Triaging all!")
+			for (i = 0; i < this.values.length; i++)
+			{
+				
+				var oldvalue = this.values[i].triagevalue ;
+				var newvalue = this.fTriage(this.values[i].ticketPriority, this.values[i].ticketStatus, this.values[i].ticketLastUpd);
+				//console.log("Traiging " +this.values[i].ticketID+ ", old var = " + oldvalue + ", and new var = " + newvalue);	
+				this.values[i].triagevalue = newvalue;
+			}
+		},
+		fTriageById : function (systemID)
 		{
 			
 			for (i = 0; i < this.values.length; i++)
 			{
 				if (this.values[i].systemID == systemID)
 				{
-					values[i].triagevalue = fTriage(values[i].ticketPriority, values[i].ticketStatus);
+					
+					this.values[i].triagevalue = this.fTriage(this.values[i].ticketPriority, this.values[i].ticketStatus,this.values[i].ticketLastUpd);
 				}
 			}
 			//set the triage value based on the parameters
 		},
-		fTriage : function (tPriority, tStatus)
+		fTriage : function (tPriority, tStatus, tDate)
 		{
+			//console.log("Attempting to triage, priority & status & date = ["+tPriority+"],["+tStatus+"],["+tDate+"]");
+
+			var returnValue = 0;
 			var searchstring = tStatus + "ф" + tPriority;
+			
 			searchstring = searchstring.replace(/ /g,'');
+			searchstring = searchstring.replace(/	/g,'');
+			
+			tPriority = tPriority.replace(/ /g,'');
+			tPriority = tPriority.replace(/	/g,'');
 			var triageTable  = {
 			NotStartedфLow : 41,
 			NotStartedфNormal : 31,
@@ -124,10 +147,10 @@ function createOutputObject()
 			ResolvedфNormal : 35,
 			ResolvedфHigh : 25,
 			ResolvedфUrgent : 15,
-			ClosedDontNotifyфLow : 59,
-			ClosedDontNotifyфNormal : 59,
-			ClosedDontNotifyфHigh : 59,
-			ClosedDontNotifyфUrgent : 59,
+			DuplicateCaseфLow : 59,
+			DuplicateCaseфNormal : 59,
+			DuplicateCaseфHigh : 59,
+			DuplicateCaseфUrgent : 59,
 			EscalatedфLow : 42,
 			EscalatedфNormal : 32,
 			EscalatedфHigh : 22,
@@ -137,10 +160,41 @@ function createOutputObject()
 			ClosedNotifyфHigh : 59,
 			ClosedNotifyфUrgent : 59};
 			
+			var updateDueTable = 
+			{ Low : 4,
+			Normal : 2,
+			High : 1,
+			Urgent : 1};
 			
-			//console.log( "Triage test : " + searchstring );
-			//console.log( "Triage test : " + triageTable[searchstring] );
-			return triageTable[searchstring];
+			var now = new Date();
+			var curDate = new Date(tDate);
+			//console.log("Parsed the following date: "+curDate + " from " + tDate );
+			//console.log("The amount of forwards is: ["+tPriority +"][" +updateDueTable[tPriority] + "]");
+			curDate.setDate(curDate.getDate() + updateDueTable[tPriority]);
+			//console.log("Parsed the following date: "+curDate + " from " + tDate + "   ");
+			if (tStatus == "WithDevelopment")
+			{
+				curDate = new Date(tDate);
+				curDate.setDate(curDate.getDate() + 14);
+				/*var dbgstring = "@@"+curDate + ":" + now + ":" ;
+				if ( curDate > now) 
+					dbgstring += "Curdate is in the future";
+				else
+					dbgstring += "Curdate is in the past";
+				console.log (dbgstring); //*/
+			}
+			
+			
+			//console.log( "target date = [" + curDate +"], current time = [" +now+ "]" );
+			if(curDate > now || triageTable[searchstring] == 59)
+			{ returnValue = 200 }
+			
+			else
+			{ returnValue = 100 }
+			returnValue += triageTable[searchstring];
+			//console.log( "Triage test : " + searchstring  + " | " + parseInt(returnValue));
+			
+			return parseInt(returnValue);
 
 			
 			
@@ -172,6 +226,10 @@ function createOutputObject()
 			return -1;
 		if (ticketA.triagevalue > ticketB.triagevalue)
 			return 1;
+		if (ticketA.ticketLastUpd < ticketB.ticketLastUpd) 
+			return -1; 
+		if (ticketA.ticketLastUpd > ticketB.ticketLastUpd) 
+			return 1;
 		if (ticketA.ticketID < ticketB.ticketID)
 			return -1;
 		if (ticketA.ticketID > ticketB.ticketID)
@@ -184,26 +242,31 @@ function createOutputObject()
 		},
 		fUpdateDate : function  (systemID)
 		{
+			var i = 0;
 			var found = false;
 			for (i = 0; i < this.values.length; i++)
 			{
 				if (this.values[i].systemID + "" == systemID + "")
 				{
 					
-					var today = new Date();
-					var dateString = today.getUTCFullYear() + "-" + today.getUTCMonth()+"-" +today.getUTCDate()+ " ";
-					dateString += today.getUTCHours() <10 ? "0"+ today.getUTCHours() : today.getUTCHours();
-					dateString += today.getUTCMinutes() <10 ? "0"+ today.getUTCMinutes() : today.getUTCMinutes();
+					var date = new Date();
+					
+					var dateString = date.getUTCFullYear() + "-" +
+    ("0" + (date.getUTCMonth()+1)).slice(-2) + "-" +
+    ("0" + date.getUTCDate()).slice(-2) + " " +
+    ("0" + date.getUTCHours()).slice(-2) + ":" +
+    ("0" + date.getUTCMinutes()).slice(-2);
 					
 					this.values[i].ticketLastUpd =  dateString;
-					this.fTriage(systemID);
+					this.fTriageById(systemID);
 					
-					console.log("Found "+this.values[i].ticketID+", updated date to" + this.values[i].ticketLastUpd);
+					console.log("Found "+this.values[i].systemID+", updated date to" + this.values[i].ticketLastUpd);
 					
 				}
 				
 					
 			}
+
 		
 		}
 		
@@ -231,3 +294,4 @@ function createOutputObject()
 	
 	
 }
+

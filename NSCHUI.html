@@ -32,9 +32,21 @@
 				<div id = "NSCHUI_loading_bar" class = "NSCHUI_loading_bar" style = "color:red; width:100%;">		
 				</div>
 			</div>
+			</td>
+			<td>
 			<div class="uir-portlet-list-filter-field"> 
 				<input class = "NSCHUI_button" type = "button" value = "re-triage" onclick="triageAll()" />
-				</div>
+				
+			</div>
+			</td>
+			<td>
+			<div class = "iur-portlet-list-filter-field">
+				<input class = "NSCHUI_button" id = "NSCHUI_save_button" type = "button" value = "save" onclick="save()" />
+			</div>
+			</td>
+			<td>
+			<div class = "iur-portlet-list-filter-field">
+				<input class = "NSCHUI_button" id = "NSCHUI_clear_button" type = "button" value = "Purge cache" onclick="purgeCache()" />
 			</div>
 			</td>
 		</tr></tbody>
@@ -58,7 +70,7 @@ window.phoneformat ='123-456-7890';
 
 <td height="100%" style="cursor:pointer;" id="div__lab7" nowrap="" class="listheadertd listheadertextb uir-list-header-td" onclick="doServerSortneg706 ('Case_STATUS_raw');return false;" data-label="Status"><div class="listheader"><span class="uir-label-no-required-flag" id="status_fs_lbl">Status</span><span id="neg706dir6" class="listheadersort"></span><img class="uir-dle-icon" src="/images/hover/icon_dle.png?v=2018.2.0" alt="This column is editable" border="0" style="vertical-align:middle;" title="This column is editable">&nbsp;</div></td> 
 
-<td height="100%" style="cursor:pointer;" id="div__lab8" nowrap="" class="listheadertd listheadertextb uir-list-header-td" onclick="" data-label="LastUpdate"><div class="listheader"><span class="uir-label-no-required-flag" id="status_fs_lbl">Last Updated</span><span id="neg706dir6" class="listheadersort"></span></div></td> 
+<td height="100%" style="cursor:pointer;" id="div__lab8" nowrap="" class="listheadertd listheadertextb uir-list-header-td" onclick="" data-label="LastUpdate" ><div class="listheader" style = "width:100px; "><span class="uir-label-no-required-flag" id="status_fs_lbl" >Last Updated</span><span id="neg706dir6" class="listheadersort"></span></div></td> 
 
 </tr>
 </thead>
