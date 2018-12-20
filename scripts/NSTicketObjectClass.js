@@ -268,6 +268,21 @@ function createOutputObject()
 			}
 
 		
+		},
+		fDelete : function (systemID)
+		{
+			var i = 0;
+			var found = false;
+			var foundID = 0;
+			for (i = 0; i < this.values.length; i++)
+			{
+				if (this.values[i].systemID + "" == systemID + "")
+				{
+					foundID = i;
+				}
+			}
+			this.values.splice(foundID,1);
+			
 		}
 		
 			

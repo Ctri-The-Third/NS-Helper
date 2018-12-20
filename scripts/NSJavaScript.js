@@ -254,6 +254,13 @@ function UpdateDate(SystemID)
 	save();
 }
 
+function DeleteFromCache(SystemID)
+{
+	outputObject.fDelete(SystemID)
+	outputObject.fSortByTriage();
+	populateUI();
+	save();
+}
 
 
 

@@ -25,6 +25,7 @@ function NSCHcreateRow(AbsID, TicketID, Subject, Priority, Status, lastUpdated, 
 
 	//Link
 	htmlString += '<td valign="top" class="portlettextctr" nowrap="" style="">';
+	htmlString +=   '[<a class="dottedlink" onclick="DeleteFromCache('+AbsID+')">X</a>]  -  ';
 	htmlString += 	'<a class="dottedlink" onclick="window.open(\'/app/crm/support/supportcase.nl?id='+AbsID+'\')">View</a>  -  ';
 	htmlString +=   '<a class="dottedlink" onclick="window.open(\'/app/crm/common/crmmessagehistory.nl?fkcol=kEvent&id='+AbsID+'\')">Message history</a>'
 	htmlString += '</td> \n';
