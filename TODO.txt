@@ -1,10 +1,21 @@
-1. Figure out how to make this run without reliance on Console
+X1. Figure out how to make this run without reliance on Console  
 	a. Chrome Extension?
 	b. User Script?
 	c. Investigate older version of cookie clicker addons
 
-2. Create on-screen display of existing information
-3. click - to - load an individual ticket's info and extra "last updated", and "customer", and "assignee"
+X2. Create on-screen display of existing information
+   Xa. display ticket information
+   Xb. scrape ticket's system ID
+   Xc. create direct link to ticket 
+X3. Loading bar, 
+X4. click to run parse.
+5. Saving & Loading of state to Google Storage    
+X6. "Update" individual ticket's info
+7. click - to - load an individual ticket's info and extra "last updated", and "customer", and "assignee"
+   a. background loading
 
-4. auto-load issues by state
-5. load issues for other support users.
+
+8. auot-load issues for other support users.
+
+
+@ auto-grab column headers
