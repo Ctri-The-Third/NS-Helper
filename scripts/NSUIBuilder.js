@@ -72,8 +72,10 @@ function populateUI()
 		document.getElementById("NSCH_table").innerHTML = "";
 		console.log("==========================================\n");
 		console.log("number of rows to create = " + outputObject.values.length);
-		var counter = 0;
-		for (x = 0; x <  outputObject.values.length && x < 50; x++)
+		
+		var totalcounter = 0;
+		var closedcounter = 0;
+		for (x = 0; x <  outputObject.values.length && totalcounter < 50; x++)
 		{
 			var string = "";
 			//console.log(x + " | " + outputObject.length + " | @@ " + outputObject.toString());
@@ -92,15 +94,21 @@ function populateUI()
 		}
 			*/
 			//NSCHcreateRow(AbsID, TicketID, Subject, Priority, Status, lastUpdated, UrgencyValue, rowID)
+			totalcounter ++;
+			if (outputObject.values[x].isClosed )
+			{
+				closedcounter++;
 			
-			if (outputObject.values[x].ticketStatus == "Closed Dont Notify")
-			{
-				counter ++;
+				if (closedcounter <= 20)
+				{
+				document.getElementById("NSCH_table").innerHTML += 
+				NSCHcreateRow(""+ outputObject.values[x].systemID, outputObject.values[x].ticketID, outputObject.values[x].ticketSubject, outputObject.values[x].ticketPriority, outputObject.values[x].ticketStatus, outputObject.values[x].ticketLastUpd, outputObject.values[x].triagevalue, x);
+				}
 			}
-			if (counter <= 20)
+			else
 			{
-			document.getElementById("NSCH_table").innerHTML += 
-			NSCHcreateRow(""+ outputObject.values[x].systemID, outputObject.values[x].ticketID, outputObject.values[x].ticketSubject, outputObject.values[x].ticketPriority, outputObject.values[x].ticketStatus, outputObject.values[x].ticketLastUpd, outputObject.values[x].triagevalue, x);
+				document.getElementById("NSCH_table").innerHTML += 
+				NSCHcreateRow(""+ outputObject.values[x].systemID, outputObject.values[x].ticketID, outputObject.values[x].ticketSubject, outputObject.values[x].ticketPriority, outputObject.values[x].ticketStatus, outputObject.values[x].ticketLastUpd, outputObject.values[x].triagevalue, x);
 			}
 		}
 		console.log("==========================================\n");
