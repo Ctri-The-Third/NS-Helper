@@ -26,7 +26,7 @@ function NSCHcreateRow(AbsID, TicketID, Subject, Priority, Status, lastUpdated, 
 	//Link
 	htmlString += '<td valign="top" class="portlettextctr" nowrap="" style="">';
 	htmlString +=   '[<a class="dottedlink" onclick="DeleteFromCache('+AbsID+')">X</a>]  -  ';
-	htmlString += 	'<a class="dottedlink" onclick="window.open(\'/app/crm/support/supportcase.nl?id='+AbsID+'\')">View</a>  -  ';
+	htmlString += 	'<a class="dottedlink" onclick="window.open(\'/app/crm/support/supportcase.nl?id='+AbsID+'&e=T\')">View</a>  -  ';
 	htmlString +=   '<a class="dottedlink" onclick="window.open(\'/app/crm/common/crmmessagehistory.nl?fkcol=kEvent&id='+AbsID+'\')">Message history</a>'
 	htmlString += '</td> \n';
 
@@ -75,7 +75,7 @@ function populateUI()
 		
 		var totalcounter = 0;
 		var closedcounter = 0;
-		for (x = 0; x <  outputObject.values.length && totalcounter < 50; x++)
+		for (x = 0; x <  outputObject.values.length && totalcounter < 20; x++)
 		{
 			var string = "";
 			//console.log(x + " | " + outputObject.length + " | @@ " + outputObject.toString());
@@ -95,11 +95,14 @@ function populateUI()
 			*/
 			//NSCHcreateRow(AbsID, TicketID, Subject, Priority, Status, lastUpdated, UrgencyValue, rowID)
 			totalcounter ++;
-			if (outputObject.values[x].isClosed )
+			console.log(outputObject.values[x].ticketID + ", is closed ["+outputObject.values[x].isClosed+"]");
+			if (outputObject.values[x].isClosed == false )
 			{
+				
+				
 				closedcounter++;
 			
-				if (closedcounter <= 20)
+				if (closedcounter <= 5)
 				{
 				document.getElementById("NSCH_table").innerHTML += 
 				NSCHcreateRow(""+ outputObject.values[x].systemID, outputObject.values[x].ticketID, outputObject.values[x].ticketSubject, outputObject.values[x].ticketPriority, outputObject.values[x].ticketStatus, outputObject.values[x].ticketLastUpd, outputObject.values[x].triagevalue, x);

@@ -15,13 +15,13 @@ function createOutputObject()
 		ticketCusID : "54425864",
 		ticketOneLiner : "See case notes & messages",
 		triagevalue : 999,
-		isclosed : false
+		isOpen : false
 		}*/],
 		fSort : function ()
 		{
 			//sort all values
 		},
-		fAdd : function (newSystemID, newTicketID, newTicketSubject, newTicketStatus, newTicketAssignee, newTicketPriority, newTicketLastUpd, newTicketCusID, newTicketOneLiner, newTriagevalue, newIsClosed)
+		fAdd : function (newSystemID, newTicketID, newTicketSubject, newTicketStatus, newTicketAssignee, newTicketPriority, newTicketLastUpd, newTicketCusID, newTicketOneLiner, newTriagevalue, newIsOpen)
 		{
 			if(this.values == undefined || this.values == [])
 			{
@@ -48,7 +48,7 @@ function createOutputObject()
 					this.values[i].ticketStatus   = newTicketStatus
 					this.values[i].ticketAssignee   = newTicketAssignee
 					this.values[i].ticketPriority   = newTicketPriority
-					this.values[i].isClosed = newIsClosed
+					this.values[i].isOpen = newIsOpen
 					//this.values[i].ticketLastUpd   = 
 					//this.values[i].ticketCusID   = 
 					//this.values[i].ticketOneLiner   = 

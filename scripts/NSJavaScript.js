@@ -154,7 +154,7 @@ function parsePage()
 	
 	for (x = 1; x < targetTableRowsCount -1; x++) 
 	{
-		console.log("-----");
+		//console.log("-----");
 		var outputColumn = new Array();
 		//(systemID, ticketID, ticketSubject, ticketStatus, ticketAssignee, ticketPriority, ticketLastUpd, ticketCusID, ticketOneLiner, triagevalue)
 		
@@ -164,8 +164,8 @@ function parsePage()
 		
 	
 		var systemLink = targetTable.rows[x].cells[2].innerHTML;	
-		var isClosed = linkHasEditRegex.exec(targetTable.rows[x].cells[1].innerHTML);
-		isClosed = !!isClosed;
+		var isOpen = linkHasEditRegex.exec(targetTable.rows[x].cells[1].innerHTML);
+		isOpen = !!isOpen;
 		
 		//console.log("Stripping stage 0: " + systemLink);
 		systemLink = linkRegex.exec(systemLink);
@@ -182,11 +182,11 @@ function parsePage()
 		ticketAssignee,
 		targetTable.rows[x].cells[5].innerText, //ticketPriority =
 		"1900-01-01 00:01",
-		"0","", 999, isClosed);
+		"0","", 999, isOpen);
 		
 		
-		console.log("DBG Ticket ID " + targetTable.rows[x].cells[1].innerText + " returned " + isClosed);
-		console.log(targetTable.rows[x].cells[1].innerHTML);
+		console.log("DBG Ticket ID " + targetTable.rows[x].cells[2].innerText + " returned " + isOpen);
+		//console.log(targetTable.rows[x].cells[1].innerHTML);
 		outputColumn.push(targetTable.rows[x],ticketAssignee);
 		//scraperOutputText += ticketAssignee + "\t";
 		
