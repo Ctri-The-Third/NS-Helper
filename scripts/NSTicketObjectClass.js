@@ -4,6 +4,10 @@ function createOutputObject()
 {
 	var returnObject =
 	{
+		gameObject : {
+			silvers : 0,
+			golds : 0	
+		},
 		values : [/*{
 		systemID : "0",
 		ticketID : "Ticket0",
@@ -42,6 +46,9 @@ function createOutputObject()
 				{
 					found = true;
 					//console.log("Found a dupe, ID = " + this.values[i].systemID + " vs parameter " + newSystemID+", status "+this.values[i].ticketStatus +" vs "+ newTicketStatus);
+					
+					//check status 
+					
 					
 					this.values[i].ticketID = newTicketID
 					this.values[i].ticketSubject = newTicketSubject
@@ -253,10 +260,10 @@ function createOutputObject()
 					var date = new Date();
 					
 					var dateString = date.getUTCFullYear() + "-" +
-    ("0" + (date.getUTCMonth()+1)).slice(-2) + "-" +
-    ("0" + date.getUTCDate()).slice(-2) + " " +
-    ("0" + date.getUTCHours()).slice(-2) + ":" +
-    ("0" + date.getUTCMinutes()).slice(-2);
+					("0" + (date.getUTCMonth()+1)).slice(-2) + "-" +
+					("0" + date.getUTCDate()).slice(-2) + " " +
+					("0" + date.getUTCHours()).slice(-2) + ":" +
+					("0" + date.getUTCMinutes()).slice(-2);
 					
 					this.values[i].ticketLastUpd =  dateString;
 					this.fTriageById(systemID);

@@ -41,12 +41,18 @@ console.log("Successful hit of ChromeLoader.js");
 	  //console.log(request.values);
 	  
 	  //console.log(sender);
-	  
+	  chrome.storage.local.set({"NSCHGameJson" : JSON.stringify(request.gameobject)});
 	      
 		chrome.storage.local.get('NSCHJson', function (result) {
         console.log("Info now stored in storage.local: ");
         console.log(typeof result.NSCHJson);
-		console.log(result.NSCHJson);});
+		//console.log(result.NSCHJson);
+		});
+		
+      	chrome.storage.local.get('NSCHGameJson', function (result) {
+        console.log("Info now stored in storage.local: ");
+        console.log(typeof result.NSCHGameJson);
+		console.log(result.NSCHGameJson);});
       
 	  
     //if (sender.url == blocklistedWebsite)

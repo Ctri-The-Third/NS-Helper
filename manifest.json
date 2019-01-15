@@ -24,6 +24,9 @@
 		"scripts/jquery-3.3.1.js",
 		"scripts/NSUIBuilder.js",
 		"CSS/NSCHUI.css",
+		"CSS/bootstrap.css",
+		"images/award-gold-medium.png",
+		"images/award-silver-medium.png",
 		"NSCHUI.html"],
 	
 	"page_action": {

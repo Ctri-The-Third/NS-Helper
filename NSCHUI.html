@@ -3,54 +3,48 @@
     <div class="ns-portlet-header ui-sortable-handle" tabindex="0" >
 			
         <h2 class="ns-portlet-header-text">Netsuite Cases Helper</h2>
-        <
-            <span class="ns-portlet-update-time"></span>
-
         
-    </div>
+         </div>
 
     <div class="ns-portlet-body">
         <div class="ns-portlet-content" >
-<div  class="ns-search-result-container " >
+<div  class="ns-search-result-container" >
 
 <form method="POST" name="footer_actions_-706XX_form" id="footer_actions_-706XX_form" action="/app/common/search/searchresults.nl?searchtype=Case" class="noprint" style="margin:0px;">
-<div class="uir_control_bar"></div>
+
 <div class="portletFilterBar">
-
-   <table width="100%" border="0" cellspacing="0" cellpadding="0" class="uir_top_footer_row" role="presentation">
-		<tbody><tr>
-			<td>
-				<div class="uir-portlet-list-filter-field"> 
-					<input class = "NSCHUI_button" type = "button" value = "Scan" onclick="resetScraper(); parseAllPages();" />
-					<!--  -->
-				</div>
-
-
+	<div class = "container-fluid" style = "width:100%; " >
+	<div class = "row" style = "">
+	<div class = "col NSCHUI_header_section">
 			
-			<td>
+				<input class = "NSCHUI_button" type = "button" value = "Scan" onclick="resetScraper(); parseAllPages();" />
+					<!--  -->
+			
 			<div id = "NSCHUI_loading_wrapper" class = "uir-field-wrapper NSCHUI_loading_wrapper" >
 				<div id = "NSCHUI_loading_bar" class = "NSCHUI_loading_bar" style = "color:red; width:100%;">		
 				</div>
 			</div>
-			</td>
-			<td>
-			<div class="uir-portlet-list-filter-field"> 
+			
 				<input class = "NSCHUI_button" type = "button" value = "re-triage" onclick="triageAll()" />
 				
-			</div>
-			</td>
-			<td>
-			<div class = "iur-portlet-list-filter-field">
+			
+			
 				<input class = "NSCHUI_button" id = "NSCHUI_save_button" type = "button" value = "save" onclick="save()" />
-			</div>
-			</td>
-			<td>
-			<div class = "iur-portlet-list-filter-field">
+			
+			
 				<input class = "NSCHUI_button" id = "NSCHUI_clear_button" type = "button" value = "Purge cache" onclick="purgeCache()" />
-			</div>
-			</td>
-		</tr></tbody>
-	</table>
+			
+	</div>
+
+	<div class = "col-1 NSCHUI_header_section" style = "align:right;" ID = "NSCHUI_gold">
+		<img src = ""> 5		
+	</div>
+	<div class = "col-1 NSCHUI_header_section" style = "align:right;" ID = "NSCHUI_silver">
+		<img src = ""> 20		
+	</div>
+	</div>
+	</div>
+
 </div>
 </form>
 <div id=""><div class="uir-list-table-container">

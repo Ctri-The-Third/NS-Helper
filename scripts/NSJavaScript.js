@@ -30,6 +30,22 @@ function load()
 			console.log(e.message);
 		}
 	}
+	var JSONElement = document.getElementById("NSCHUIGameSaveValue");
+	
+	if (JSONElement != undefined)
+	{
+		console.log("Trying to parse JSON into legit object");
+		console.log(JSONElement.value);
+		try
+		{
+			outputObject.gameobject = JSON.parse(JSONElement.value);
+			outputObject.fSortByTriage();
+		}
+		catch (e)
+		{
+			console.log(e.message);
+		}
+	}
 	else {console.log("JSON load failed, couldn't find element");}
 	resetScraper();
 	extensionID = "occmhpdkmpdgabnmdjnjhnifmdimeeoo"; //TODO - inject this from the plugin, make it self aware.
@@ -69,7 +85,8 @@ function load()
 			
 		}
 	}
-	
+	outputObject.gameObject.golds ++;
+	outputObject.gameObject.silvers ++;
 }
 
 function resetScraper()
@@ -280,12 +297,14 @@ chrome.runtime.sendMessage(extensionID, {values: ""},
 
 function save()
 {
+	var DBGSaveValues = {values : outputObject.values,gameobject: outputObject.gameobject};
 	
-chrome.runtime.sendMessage(extensionID, {values: outputObject.values},
+chrome.runtime.sendMessage(extensionID, {values: outputObject.values,gameobject: outputObject.gameobject},
   function(response) {
     if (!response.success)
       handleError(url);
   });
+
 }
 
 function triageAll()

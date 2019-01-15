@@ -16,3 +16,18 @@
   line-height: 30px;
   color: white;
 }
+.NSCHUI_gameified_img
+{
+	width:25px;
+	height:25px;
+}
+
+.NSCHUI_header_bar
+{
+	padding-top:5px;
+}
+
+.NSCHUI_header_section
+{
+	border:1px solid red;
+}

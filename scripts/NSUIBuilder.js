@@ -69,13 +69,23 @@ function populateUI()
 	
 	setTimeout(function ()
 	{
+		var goldbox = document.getElementById("NSCHUI_gold");
+		var silverbox = document.getElementById("NSCHUI_silver");
+		
+		var silverURL = document.getElementById("NSCHUI_silver_img_url").src;
+		var goldURL = document.getElementById("NSCHUI_gold_img_url").src;
+		
+		goldbox.innerHTML = "<img src = '"+goldURL+"' class = 'NSCHUI_gameified_img'/>" + outputObject.gameObject.golds;
+		silverbox.innerHTML = "<img src = '"+silverURL+"' class = 'NSCHUI_gameified_img'/>" + outputObject.gameObject.silvers;
+		
+		
 		document.getElementById("NSCH_table").innerHTML = "";
 		console.log("==========================================\n");
 		console.log("number of rows to create = " + outputObject.values.length);
 		
 		var totalcounter = 0;
 		var closedcounter = 0;
-		for (x = 0; x <  outputObject.values.length && totalcounter < 20; x++)
+		for (x = 0; x <  outputObject.values.length && totalcounter < 30; x++)
 		{
 			var string = "";
 			//console.log(x + " | " + outputObject.length + " | @@ " + outputObject.toString());
