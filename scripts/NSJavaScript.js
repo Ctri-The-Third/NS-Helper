@@ -19,7 +19,7 @@ function load()
 	if (JSONElement != undefined)
 	{
 		console.log("Trying to parse JSON into legit object");
-		console.log(JSONElement.value);
+		//console.log(JSONElement.value);
 		try
 		{
 			outputObject.values = JSON.parse(JSONElement.value);
@@ -34,12 +34,13 @@ function load()
 	
 	if (JSONElement != undefined)
 	{
-		console.log("Trying to parse JSON into legit object");
+		console.log("Trying to parse Game JSON into legit object");
 		console.log(JSONElement.value);
 		try
 		{
-			outputObject.gameobject = JSON.parse(JSONElement.value);
-			outputObject.fSortByTriage();
+			outputObject.gameObject = JSON.parse(JSONElement.value);
+			
+			console.log("Success, we have ["+outputObject.gameObject.golds+"] golds, and ["+outputObject.gameObject.silvers+"] silvers");
 		}
 		catch (e)
 		{
@@ -85,8 +86,7 @@ function load()
 			
 		}
 	}
-	outputObject.gameObject.golds ++;
-	outputObject.gameObject.silvers ++;
+
 }
 
 function resetScraper()
@@ -202,7 +202,7 @@ function parsePage()
 		"0","", 999, isOpen);
 		
 		
-		console.log("DBG Ticket ID " + targetTable.rows[x].cells[2].innerText + " returned " + isOpen);
+		//console.log("DBG Ticket ID " + targetTable.rows[x].cells[2].innerText + " returned " + isOpen);
 		//console.log(targetTable.rows[x].cells[1].innerHTML);
 		outputColumn.push(targetTable.rows[x],ticketAssignee);
 		//scraperOutputText += ticketAssignee + "\t";
@@ -268,8 +268,12 @@ function loadUI()
 
 function UpdateDate(SystemID)
 {
+	console.log("ENTERING, silver = " + outputObject.gameObject.silvers);
+	outputObject.gameObject.silvers ++;
+	console.log("POST UPDATE, silver = " + outputObject.gameObject.silvers);
 	outputObject.fUpdateDate(SystemID);
 	outputObject.fSortByTriage();
+	
 	populateUI();
 	save();
 }
@@ -297,9 +301,9 @@ chrome.runtime.sendMessage(extensionID, {values: ""},
 
 function save()
 {
-	var DBGSaveValues = {values : outputObject.values,gameobject: outputObject.gameobject};
-	
-chrome.runtime.sendMessage(extensionID, {values: outputObject.values,gameobject: outputObject.gameobject},
+	var DBGSaveValues = {values : outputObject.values,gameobject: outputObject.gameObject};
+	console.log(DBGSaveValues);
+chrome.runtime.sendMessage(extensionID, {values: outputObject.values,gameobject: outputObject.gameObject},
   function(response) {
     if (!response.success)
       handleError(url);

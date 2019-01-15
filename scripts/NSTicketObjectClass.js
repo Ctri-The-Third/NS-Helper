@@ -49,6 +49,7 @@ function createOutputObject()
 					
 					//check status 
 					
+					//check if old status and new status means ticket is closed
 					
 					this.values[i].ticketID = newTicketID
 					this.values[i].ticketSubject = newTicketSubject
@@ -60,7 +61,7 @@ function createOutputObject()
 					//this.values[i].ticketCusID   = 
 					//this.values[i].ticketOneLiner   = 
 					//this.values[i].triagevalue   = 
-					console.log("DBG: "+newSystemID+" Triaging an existing value, with the date "+ this.values[i].ticketLastUpd) ;
+					//console.log("DBG: "+newSystemID+" Triaging an existing value, with the date "+ this.values[i].ticketLastUpd) ;
 					this.values[i].triagevalue = this.fTriage(newTicketPriority, newTicketStatus,this.values[i].ticketLastUpd)
 				}
 				
@@ -318,3 +319,17 @@ function createOutputObject()
 	
 }
 
+function gameStatuscheck(old, newvar)
+{
+	
+	if (newvar == "Resolved" || newvar == "ClosedNotify")
+	{
+		if (old != "Resolved" && old != "ClosedNotify")
+		{
+			outputObject.gameObject.golds ++;
+			console.log("Successfully closed a ticket, added a gold!");
+			
+		}
+	
+	}
+}

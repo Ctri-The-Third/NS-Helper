@@ -59,13 +59,13 @@ document.getElementsByTagName('head')[0].appendChild(s);
 
 s = document.createElement('img')
 s.src = chrome.runtime.getURL('images/award-gold-medium.png');
-s.setAttribute("style","visibility:none;");
+s.setAttribute("style","display:none;");
 s.setAttribute("ID","NSCHUI_gold_img_url");
 
 document.getElementsByTagName('body')[0].appendChild(s);
 s = document.createElement('img')
 s.src = chrome.runtime.getURL('images/award-silver-medium.png');
-s.setAttribute("style","visibility:none;");
+s.setAttribute("style","display:none;");
 s.setAttribute("ID","NSCHUI_silver_img_url");
 
 document.getElementsByTagName('body')[0].appendChild(s);

@@ -80,8 +80,8 @@ function populateUI()
 		
 		
 		document.getElementById("NSCH_table").innerHTML = "";
-		console.log("==========================================\n");
-		console.log("number of rows to create = " + outputObject.values.length);
+		//console.log("==========================================\n");
+		//console.log("number of rows to create = " + outputObject.values.length);
 		
 		var totalcounter = 0;
 		var closedcounter = 0;
@@ -105,7 +105,7 @@ function populateUI()
 			*/
 			//NSCHcreateRow(AbsID, TicketID, Subject, Priority, Status, lastUpdated, UrgencyValue, rowID)
 			totalcounter ++;
-			console.log(outputObject.values[x].ticketID + ", is closed ["+outputObject.values[x].isClosed+"]");
+			//console.log(outputObject.values[x].ticketID + ", is closed ["+outputObject.values[x].isClosed+"]");
 			if (outputObject.values[x].isClosed == false )
 			{
 				

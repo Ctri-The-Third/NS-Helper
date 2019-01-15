@@ -1,5 +1,8 @@
 #NSCHUI_loading_wrapper
 {
+	margin-top:2px;
+	
+	
 	margin-left:5px;
 	width:100px;
 	height:20px;
@@ -9,6 +12,9 @@
 
 #NSCHUI_loading_bar
 {
+  
+  
+
   width: 1%;
   height: 100%;
   background-color: red;
@@ -20,6 +26,7 @@
 {
 	width:25px;
 	height:25px;
+	margin-right:5px;
 }
 
 .NSCHUI_header_bar
@@ -29,5 +36,5 @@
 
 .NSCHUI_header_section
 {
-	border:1px solid red;
+	border:0px solid red;
 }
