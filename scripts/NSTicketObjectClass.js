@@ -322,9 +322,9 @@ function createOutputObject()
 function gameStatuscheck(old, newvar)
 {
 	
-	if (newvar == "Resolved" || newvar == "ClosedNotify")
+	if (newvar == "Resolved" || newvar == "ClosedNotify" || "Closed Notify")
 	{
-		if (old != "Resolved" && old != "ClosedNotify")
+		if (old != "Resolved" && old != "ClosedNotify" && "Closed Notify")
 		{
 			outputObject.gameObject.golds ++;
 			console.log("Successfully closed a ticket, added a gold!");
