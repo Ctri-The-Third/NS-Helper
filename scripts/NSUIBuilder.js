@@ -106,12 +106,9 @@ function populateUI()
 			//NSCHcreateRow(AbsID, TicketID, Subject, Priority, Status, lastUpdated, UrgencyValue, rowID)
 			totalcounter ++;
 			//console.log(outputObject.values[x].ticketID + ", is closed ["+outputObject.values[x].isClosed+"]");
-			if (outputObject.values[x].isClosed == false )
+			if (outputObject.values[x].isClosed == true )
 			{
-				
-				
 				closedcounter++;
-			
 				if (closedcounter <= 5)
 				{
 				document.getElementById("NSCH_table").innerHTML += 

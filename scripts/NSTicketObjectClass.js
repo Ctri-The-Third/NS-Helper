@@ -27,6 +27,10 @@ function createOutputObject()
 		},
 		fAdd : function (newSystemID, newTicketID, newTicketSubject, newTicketStatus, newTicketAssignee, newTicketPriority, newTicketLastUpd, newTicketCusID, newTicketOneLiner, newTriagevalue, newIsOpen)
 		{
+			if(newSystemID == 8125971 || newSystemID == "8125971")
+				console.log("DBG: Processing the test ticket.  new status = ["+ newTicketStatus+ "]");
+		
+		
 			if(this.values == undefined || this.values == [])
 			{
 					//container object is empty
@@ -44,10 +48,13 @@ function createOutputObject()
 				//console.log("testing: " + this.values[i].systemID + " vs " + newSystemID);
 				if (this.values[i] != undefined && this.values[i].systemID == ""+ newSystemID)
 				{
+					if(newSystemID == 8125971 || newSystemID == "8125971")
+						console.log("DBG: Processing the test ticket. Current status = ["+this.values[i].ticketStatus+"], new status = ["+ newTicketStatus+ "]");
+					
 					found = true;
 					//console.log("Found a dupe, ID = " + this.values[i].systemID + " vs parameter " + newSystemID+", status "+this.values[i].ticketStatus +" vs "+ newTicketStatus);
 					
-					//check status 
+					gameStatuscheck(this.values[i].ticketStatus,newTicketStatus)
 					
 					//check if old status and new status means ticket is closed
 					
@@ -95,6 +102,9 @@ function createOutputObject()
 				looplength = looplength + 1 
 				
 			}
+			
+			
+			outputObject.values[x].isClosed = checkIsClosed(newTicketStatus, newTicketLastUpd);
 	
 			//check for dupes and add
 		},
@@ -319,15 +329,32 @@ function createOutputObject()
 	
 }
 
+function checkIsClosed(ticketstatus, closeddate)
+{
+	var output = false;
+	
+	var today = new Date()
+	var priorDate = new Date().setDate(today.getDate()-30)
+
+	
+	if (ticketstatus == "Closed Notify" || ticketstatus == "Resolved" || ticketstatus == "Duplicate Case")
+		if (closeddate < priorDate)
+			output = true;
+		
+	
+	
+	return output;
+}
+
 function gameStatuscheck(old, newvar)
 {
 	
-	if (newvar == "Resolved" || newvar == "ClosedNotify" || "Closed Notify")
+	if (newvar == "Resolved" || newvar == "ClosedNotify" || newvar == "Closed Notify")
 	{
-		if (old != "Resolved" && old != "ClosedNotify" && "Closed Notify")
+		if (old != "Resolved" && old != "ClosedNotify" && old !=  "Closed Notify")
 		{
 			outputObject.gameObject.golds ++;
-			console.log("Successfully closed a ticket, added a gold!");
+			console.log("Successfully closed a ticket, added a gold! ["+old+","+newvar+"]");
 			
 		}
 	
