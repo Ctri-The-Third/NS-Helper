@@ -23,10 +23,12 @@
 		"scripts/NSTicketObjectClass.js",
 		"scripts/jquery-3.3.1.js",
 		"scripts/NSUIBuilder.js",
+		"scripts/NSStrings.js",
 		"CSS/NSCHUI.css",
 		"CSS/bootstrap.css",
 		"images/award-gold-medium.png",
 		"images/award-silver-medium.png",
+		
 		"NSCHUI.html"],
 	
 	"page_action": {

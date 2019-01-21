@@ -42,7 +42,16 @@ function NSCHcreateRow(AbsID, TicketID, Subject, Priority, Status, lastUpdated, 
 	htmlString += '<td valign="top" class="xxportlettext" style=""><a style="visibility:hidden" id="scrollid'+AbsID+'"></a><span id="lstinlnNSXX_0_1" class="listEditSpan" ntv_val="2" rec_key="'+AbsID+'">'+Priority+'</span></td>';
 
 	//last updated
-	htmlString += '<td valign="top" class="xxportlettext" style="">'+Status+ " <sup>(" +UrgencyValue+')</sup></td>';
+	htmlString += '<td valign="top" class="xxportlettext" style="">';
+	if (strings.closedStates.indexOf(Status) > -1)
+	{
+		htmlString += "<a onclick = 'overrideClose("+AbsID+")>"+Status+"</a>";
+	}
+	else 
+	{
+		htmlString += Status;
+	}
+	htmlString +=" <sup>(" +UrgencyValue+')</sup></td>';
 	//status
 	//console.log("@@ trying to parse date from " + lastUpdated);
 	var date = new Date(lastUpdated);
@@ -66,7 +75,6 @@ function NSCHcreateRow(AbsID, TicketID, Subject, Priority, Status, lastUpdated, 
 
 function populateUI()
 {
-	
 	setTimeout(function ()
 	{
 		var goldbox = document.getElementById("NSCHUI_gold");

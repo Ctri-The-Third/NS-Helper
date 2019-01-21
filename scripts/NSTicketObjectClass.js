@@ -27,8 +27,8 @@ function createOutputObject()
 		},
 		fAdd : function (newSystemID, newTicketID, newTicketSubject, newTicketStatus, newTicketAssignee, newTicketPriority, newTicketLastUpd, newTicketCusID, newTicketOneLiner, newTriagevalue, newIsOpen)
 		{
-			if(newSystemID == 8125971 || newSystemID == "8125971")
-				console.log("DBG: Processing the test ticket.  new status = ["+ newTicketStatus+ "]");
+			
+			
 		
 		
 			if(this.values == undefined || this.values == [])
@@ -48,8 +48,7 @@ function createOutputObject()
 				//console.log("testing: " + this.values[i].systemID + " vs " + newSystemID);
 				if (this.values[i] != undefined && this.values[i].systemID == ""+ newSystemID)
 				{
-					if(newSystemID == 8125971 || newSystemID == "8125971")
-						console.log("DBG: Processing the test ticket. Current status = ["+this.values[i].ticketStatus+"], new status = ["+ newTicketStatus+ "]");
+					
 					
 					found = true;
 					//console.log("Found a dupe, ID = " + this.values[i].systemID + " vs parameter " + newSystemID+", status "+this.values[i].ticketStatus +" vs "+ newTicketStatus);
@@ -69,7 +68,11 @@ function createOutputObject()
 					//this.values[i].ticketOneLiner   = 
 					//this.values[i].triagevalue   = 
 					//console.log("DBG: "+newSystemID+" Triaging an existing value, with the date "+ this.values[i].ticketLastUpd) ;
-					this.values[i].triagevalue = this.fTriage(newTicketPriority, newTicketStatus,this.values[i].ticketLastUpd)
+					if(newSystemID == 8065909 || newSystemID == "8065909")
+					{	console.log("DBG: Processing the test ticket. Current status = ["+this.values[i].ticketStatus+"], new status = ["+ newTicketStatus+ "], updated string [" + this.values[i].ticketLastUpd+"]"); }
+						
+					this.values[i].isClosed = checkIsClosed(newTicketStatus, this.values[i].ticketLastUpd);
+					this.values[i].triagevalue = this.fTriage(this.values[i].isClosed, newTicketPriority, newTicketStatus,this.values[i].ticketLastUpd)
 				}
 				
 			}
@@ -87,7 +90,8 @@ function createOutputObject()
 					ticketLastUpd : newTicketLastUpd,
 					ticketCusID : newTicketCusID,
 					ticketOneLiner : newTicketOneLiner,
-					triagevalue : newTriagevalue
+					triagevalue : newTriagevalue,
+					isClosed : checkIsClosed(newTicketStatus, newTicketLastUpd)
 				});
 				
 				
@@ -96,7 +100,7 @@ function createOutputObject()
 				{
 					
 					console.log("DBG: Triaging a 999 value");
-					this.values[looplength].triagevalue = this.fTriage(newTicketPriority, newTicketStatus, newTicketLastUpd);
+					this.values[looplength].triagevalue = this.fTriage(this.values[looplength].isClosed, newTicketPriority, newTicketStatus, newTicketLastUpd);
 					
 				}
 				looplength = looplength + 1 
@@ -104,7 +108,7 @@ function createOutputObject()
 			}
 			
 			
-			outputObject.values[x].isClosed = checkIsClosed(newTicketStatus, newTicketLastUpd);
+			
 	
 			//check for dupes and add
 		},
@@ -115,7 +119,7 @@ function createOutputObject()
 			{
 				
 				var oldvalue = this.values[i].triagevalue ;
-				var newvalue = this.fTriage(this.values[i].ticketPriority, this.values[i].ticketStatus, this.values[i].ticketLastUpd);
+				var newvalue = this.fTriage(this.values[i].isClosed, this.values[i].ticketPriority, this.values[i].ticketStatus, this.values[i].ticketLastUpd);
 				//console.log("Traiging " +this.values[i].ticketID+ ", old var = " + oldvalue + ", and new var = " + newvalue);	
 				this.values[i].triagevalue = newvalue;
 			}
@@ -128,12 +132,12 @@ function createOutputObject()
 				if (this.values[i].systemID == systemID)
 				{
 					
-					this.values[i].triagevalue = this.fTriage(this.values[i].ticketPriority, this.values[i].ticketStatus,this.values[i].ticketLastUpd);
+					this.values[i].triagevalue = this.fTriage(this.values[i].isClosed, this.values[i].ticketPriority, this.values[i].ticketStatus,this.values[i].ticketLastUpd);
 				}
 			}
 			//set the triage value based on the parameters
 		},
-		fTriage : function (tPriority, tStatus, tDate)
+		fTriage : function (tIsClosed, tPriority, tStatus, tDate)
 		{
 			//console.log("Attempting to triage, priority & status & date = ["+tPriority+"],["+tStatus+"],["+tDate+"]");
 
@@ -205,7 +209,10 @@ function createOutputObject()
 			
 			
 			//console.log( "target date = [" + curDate +"], current time = [" +now+ "]" );
-			if(curDate > now || triageTable[searchstring] == 59)
+			if (tIsClosed)
+			{returnValue = 300;}
+		
+			else if(curDate > now || triageTable[searchstring] == 59)
 			{ returnValue = 200 }
 			
 			else
@@ -329,18 +336,20 @@ function createOutputObject()
 	
 }
 
-function checkIsClosed(ticketstatus, closeddate)
+function checkIsClosed(ticketstatus, closeddatetext)
 {
 	var output = false;
-	
+	var closedDate = new Date (closeddatetext);
 	var today = new Date()
-	var priorDate = new Date().setDate(today.getDate()-30)
+	var priorDate = new Date(today.getDate()-30)
 
 	
 	if (ticketstatus == "Closed Notify" || ticketstatus == "Resolved" || ticketstatus == "Duplicate Case")
-		if (closeddate < priorDate)
+	{
+		console.log("DBG: Closed date = ["+closedDate+"], prior date ["+priorDate+"], result ("+(closedDate < priorDate)+")");
+		if (closedDate < priorDate)
 			output = true;
-		
+	}
 	
 	
 	return output;

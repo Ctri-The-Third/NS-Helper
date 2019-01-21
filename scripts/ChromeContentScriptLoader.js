@@ -57,6 +57,12 @@ s.src = chrome.runtime.getURL('scripts/NSUIBuilder.js');
 s.type = 'text/javascript'; 
 document.getElementsByTagName('head')[0].appendChild(s);
 
+s = document.createElement('script');
+s.src = chrome.runtime.getURL('scripts/NSStrings.js');
+s.type = 'text/javascript'; 
+document.getElementsByTagName('head')[0].appendChild(s);
+
+
 s = document.createElement('img')
 s.src = chrome.runtime.getURL('images/award-gold-medium.png');
 s.setAttribute("style","display:none;");
@@ -75,6 +81,8 @@ s.type = "hidden";
 s.value = chrome.runtime.getURL('NSCHUI.html');
 s.id = "NSCH blob URL";
 document.getElementsByTagName('body')[0].appendChild(s);
+
+
 
 s = document.createElement('input');
 s.type = "hidden";
