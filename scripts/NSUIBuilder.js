@@ -1,4 +1,5 @@
-function NSCHcreateRow(AbsID, TicketID, Subject, Priority, Status, lastUpdated, UrgencyValue, rowID)
+console.log("Loaded: NSUIBuilder.js");
+function NSCHcreateRow(AbsID, TicketID, Subject,Priority, Status, lastUpdated, UrgencyValue, rowID, Customer )
 {
 
 	var isOdd = false;
@@ -38,21 +39,24 @@ function NSCHcreateRow(AbsID, TicketID, Subject, Priority, Status, lastUpdated, 
 	//subject
 	htmlString += '<td valign="top" class="xxportlettext" style=""><a style="visibility:hidden" id="scrollid'+AbsID+'"></a><span id="lstinlnNSXX_0_0" class="listEditSpan uir-hoverable-anchor" rec_key="'+AbsID+'" onmouseover=\'var win = (typeof parent.getExtTooltip != "undefined" &amp;&amp; parent.getExtTooltip) ? parent : window;  if (typeof win.getExtTooltip != "undefined")var tip = win.getExtTooltip("lstinlnNSXX_0_0", "SUPPORTCASE", "TWO_COLUMN_TEMPLATE", '+AbsID+',null);if(tip != undefined) tip.onTargetOver(event);\'>'+Subject+'</span></td>';
 
-	//priority
-	htmlString += '<td valign="top" class="xxportlettext" style=""><a style="visibility:hidden" id="scrollid'+AbsID+'"></a><span id="lstinlnNSXX_0_1" class="listEditSpan" ntv_val="2" rec_key="'+AbsID+'">'+Priority+'</span></td>';
+	//Customer
+	htmlString += '<td valign="top" class="xxportlettext" style=""><a style="visibility:hidden" id="scrollid'+AbsID+'"></a><span id="lstinlnNSXX_0_1" class="listEditSpan NSCHUI_CustomerEntry" ntv_val="2" rec_key="'+AbsID+'">'+Customer.substr(0,settings.OutputLengths.customerColumn);
+	if (Customer.length > settings.OutputLengths.customerColumn)
+		htmlString+='...';
+	htmlString+='</span></td>';
 
-	//last updated
-	htmlString += '<td valign="top" class="xxportlettext" style="">';
-	if (strings.closedStates.indexOf(Status) > -1)
+	//priority & status
+	htmlString += '<td valign="top" class="xxportlettext" style="">'+Priority+", ";
+	if (strings.closedStates.indexOf(Status) > -1 )
 	{
-		htmlString += "<a onclick = 'overrideClose("+AbsID+")>"+Status+"</a>";
+		htmlString += '<a onclick = "overrideClose('+AbsID+')">'+Status.substring(0,settings.OutputLengths.StatusLength)+'...</a>';
 	}
 	else 
 	{
-		htmlString += Status;
+		htmlString += Status.substring(0,settings.OutputLengths.StatusLength)+'...';
 	}
-	htmlString +=" <sup>(" +UrgencyValue+')</sup></td>';
-	//status
+	htmlString +=' <sup>(' +UrgencyValue+')</sup></td>';
+	//last updated
 	//console.log("@@ trying to parse date from " + lastUpdated);
 	var date = new Date(lastUpdated);
 	var dateString = date.getUTCFullYear() + "-" +
@@ -120,18 +124,18 @@ function populateUI()
 				if (closedcounter <= 5)
 				{
 				document.getElementById("NSCH_table").innerHTML += 
-				NSCHcreateRow(""+ outputObject.values[x].systemID, outputObject.values[x].ticketID, outputObject.values[x].ticketSubject, outputObject.values[x].ticketPriority, outputObject.values[x].ticketStatus, outputObject.values[x].ticketLastUpd, outputObject.values[x].triagevalue, x);
+				NSCHcreateRow(""+ outputObject.values[x].systemID, outputObject.values[x].ticketID, outputObject.values[x].ticketSubject, outputObject.values[x].ticketPriority, outputObject.values[x].ticketStatus, outputObject.values[x].ticketLastUpd, outputObject.values[x].triagevalue, x, outputObject.values[x].ticketCusID );
 				}
 			}
 			else
 			{
 				document.getElementById("NSCH_table").innerHTML += 
-				NSCHcreateRow(""+ outputObject.values[x].systemID, outputObject.values[x].ticketID, outputObject.values[x].ticketSubject, outputObject.values[x].ticketPriority, outputObject.values[x].ticketStatus, outputObject.values[x].ticketLastUpd, outputObject.values[x].triagevalue, x);
+				NSCHcreateRow(""+ outputObject.values[x].systemID, outputObject.values[x].ticketID, outputObject.values[x].ticketSubject, outputObject.values[x].ticketPriority, outputObject.values[x].ticketStatus, outputObject.values[x].ticketLastUpd, outputObject.values[x].triagevalue, x, outputObject.values[x].ticketCusID);
 			}
 		}
 		console.log("==========================================\n");
 		updateProgressBar(100,"green");
-	},scraperInterval);
+	},settings.scraperInterval);
 }
 
 function updateProgressBar(percent,colour)

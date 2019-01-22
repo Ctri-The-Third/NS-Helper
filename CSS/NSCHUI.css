@@ -10,6 +10,7 @@
 	text-align:center;
 }
 
+
 #NSCHUI_loading_bar
 {
   
@@ -37,4 +38,8 @@
 .NSCHUI_header_section
 {
 	border:0px solid red;
+}
+
+.NSCHUI_CustomerEntry{
+	
 }

@@ -1,5 +1,4 @@
-//NSDataObject
-console.log("NSTicketObjectClass.js successfully injected");
+console.log("Loaded: NSTicketObjectClass.js");
 function createOutputObject()
 {
 	var returnObject =
@@ -51,7 +50,7 @@ function createOutputObject()
 					
 					
 					found = true;
-					//console.log("Found a dupe, ID = " + this.values[i].systemID + " vs parameter " + newSystemID+", status "+this.values[i].ticketStatus +" vs "+ newTicketStatus);
+					//console.log("Found a dupe, ID = " + this.values[i].systemID + " vs parameter " + newSystemID+", status "+this.values[i].ticketCusID +" vs "+ newTicketCusID);
 					
 					gameStatuscheck(this.values[i].ticketStatus,newTicketStatus)
 					
@@ -64,7 +63,8 @@ function createOutputObject()
 					this.values[i].ticketPriority   = newTicketPriority
 					this.values[i].isOpen = newIsOpen
 					//this.values[i].ticketLastUpd   = 
-					//this.values[i].ticketCusID   = 
+					if (newTicketCusID != "")
+						this.values[i].ticketCusID   =  newTicketCusID
 					//this.values[i].ticketOneLiner   = 
 					//this.values[i].triagevalue   = 
 					//console.log("DBG: "+newSystemID+" Triaging an existing value, with the date "+ this.values[i].ticketLastUpd) ;
@@ -309,7 +309,25 @@ function createOutputObject()
 			}
 			this.values.splice(foundID,1);
 			
+		},
+		fForceClose : function (systemID)
+		{
+			var i = 0;
+			var found = false;
+			var foundID = 0;
+			for (i = 0; i < this.values.length; i++)
+			{
+				if (this.values[i].systemID + "" == systemID + "")
+				{
+					foundID = i;
+				}
+			}
+			this.values[foundID].isClosed = true;
+			this.values[foundID].ticketLastUpd = "1900-01-01";
+			
 		}
+			
+			
 		
 			
 		
@@ -346,7 +364,7 @@ function checkIsClosed(ticketstatus, closeddatetext)
 	
 	if (ticketstatus == "Closed Notify" || ticketstatus == "Resolved" || ticketstatus == "Duplicate Case")
 	{
-		console.log("DBG: Closed date = ["+closedDate+"], prior date ["+priorDate+"], result ("+(closedDate < priorDate)+")");
+		//console.log("DBG: Closed date = ["+closedDate+"], prior date ["+priorDate+"], result ("+(closedDate < priorDate)+")");
 		if (closedDate < priorDate)
 			output = true;
 	}
@@ -369,3 +387,5 @@ function gameStatuscheck(old, newvar)
 	
 	}
 }
+
+

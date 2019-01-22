@@ -1,5 +1,5 @@
 var s = document.createElement('script');
-console.log("successful hit on the ChromeContentScriptLoader.js");
+console.log("Loaded: ChromeContentScriptLoader.js");
 
 //REMEMBER add "script.js" to web_accessible_resources in manifest.json
 
@@ -16,9 +16,6 @@ console.log("successful hit on the ChromeContentScriptLoader.js");
 
 
 
-
-
-
 s.src = chrome.runtime.getURL('scripts/jquery-3.3.1.js');
 s.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(s);
@@ -31,10 +28,7 @@ s.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(s);
 
 
-s = document.createElement('script');
-s.src = chrome.runtime.getURL('scripts/NSJavaScript.js');
-s.type = 'text/javascript';
-document.getElementsByTagName('head')[0].appendChild(s);
+
 
 
 // <LINK href="special.css" rel="stylesheet" type="text/css">
@@ -108,6 +102,13 @@ document.getElementsByTagName('body')[0].appendChild(s);
 		
           document.getElementById("NSCHUIGameSaveValue").value = result.NSCHGameJson;
         });
+		
+
+s = document.createElement('script');
+s.src = chrome.runtime.getURL('scripts/NSJavaScript.js');
+s.type = 'text/javascript';
+document.getElementsByTagName('head')[0].appendChild(s);		
+
 document.getElementById("ns-dashboard-heading-panel").innerHTML="<h1 style = 'color:#afa;'>Cases</h1>"
 /*$.ajax({url: "NS UI blob.html", 
 success: function(result){

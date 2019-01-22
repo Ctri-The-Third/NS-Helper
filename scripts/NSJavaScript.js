@@ -1,15 +1,16 @@
+console.log("Loaded: NSJavaScript.js");
 //var script = document.createElement('script'); script.src = "https://github.com/Ctri-The-Third/NS-Helper/blob/master/NS%20JavaScript.js"; script.onload = function() {alert("Test");}; document.getElementsByTagName('head')[0].appendChild(script);
 var scraperRunning;
-var scraperInterval;
+
 var outputObject;
 var scraperOutputText;
 var ticketAssignee;
-var scraperColumns;
+
 var scraperPosition;
 var dbg = false;
 var extensionID;
 var perPage;
-console.log("NSJavaScript.js successfully injected");
+
 function load()
 {
 	
@@ -53,23 +54,12 @@ function load()
 	scraperOutputText = "";
 	scraperStartTarget = "https://system.na2.netsuite.com/app/center/card.nl?sc=-17&whence="
 	ticketAssignee = "";
-	scraperColumns = new Array();
+	
 	perPage = 20;
 	
 
 
-	
-	//TODO: De manualify this.
-	scraperColumns[0] = "New";
-	scraperColumns[1] = "Edit | View";
-	scraperColumns[2] = "Number"
-	scraperColumns[3] = "Grab"
-	scraperColumns[4] = "Subject"
-	scraperColumns[5] = "Priority"
-	scraperColumns[6] = "Status"
-	scraperColumns[7] = "Product"
-	scraperColumns[8] = "Module"
-	scraperColumns[9] = "Abacus Type";
+
 	
 	for( i = 1; i <= 100; i++)
 	{
@@ -91,20 +81,20 @@ function load()
 
 function resetScraper()
 {
-	scraperInterval = 2000;	
+	settings.scraperInterval = 2000;	
 	scraperRunning = "Start";
 	scraperPosition = 0;
 }
 
 function parseAllPages() //main
 {
-	console.log("scraper state:"+scraperRunning +", number of captured tickets = " + outputObject.values.length + ", and current position is " + scraperPosition);
+	//console.log("scraper state:"+scraperRunning +", number of captured tickets = " + outputObject.values.length + ", and current position is " + scraperPosition);
 	
 	if (scraperRunning == "Start") //first run, set to page 0 and begin.
 	{
 		scraperPosition += perPage;
 		NS.UI.Helpers.uir_paginationSelectHelper.onPaginationChange(NS.jQuery(document.getElementsByClassName("uir-pagination-select-wrapper")), 0);
-		setTimeout(function(){scraperRunning="Active";parseAllPages()},scraperInterval);	
+		setTimeout(function(){scraperRunning="Active";parseAllPages()},settings.scraperInterval);	
 	}
 	if (scraperRunning == "Active")
 	{
@@ -116,7 +106,7 @@ function parseAllPages() //main
 		{
 			scraperPosition += perPage;	
 			scraperRunning = "Active";
-			setTimeout(function(){parseAllPages()},scraperInterval);	
+			setTimeout(function(){parseAllPages()},settings.scraperInterval);	
 		}
 		else
 		{
@@ -144,7 +134,7 @@ function pageLoadCompleteHandler()
 	if ( (scraperPosition * 2) < (max*2 ))
 	{
 		result = true;
-		console.log("Found target of " + max+ " versus length of " +  outputObject.values.length + ". Needs more! returning " + result);
+		//console.log("Found target of " + max+ " versus length of " +  outputObject.values.length + ". Needs more! returning " + result);
 		updateProgressBar((scraperPosition/max)*100,"#884");
 	}
 	else
@@ -159,7 +149,7 @@ function pageLoadCompleteHandler()
 
 function parsePage()
 {
-	var targetTable = document.getElementById("neg706__tab");
+	var targetTable = document.getElementById(strings.scraperTableTarget);
 	
 	var targetTableRowsCount = targetTable.rows.length;
 	var targetTableColsCount = targetTable.rows[1].cells.length;
@@ -171,7 +161,8 @@ function parsePage()
 	
 	for (x = 1; x < targetTableRowsCount -1; x++) 
 	{
-		//console.log("-----");
+		
+		
 		var outputColumn = new Array();
 		//(systemID, ticketID, ticketSubject, ticketStatus, ticketAssignee, ticketPriority, ticketLastUpd, ticketCusID, ticketOneLiner, triagevalue)
 		
@@ -179,27 +170,84 @@ function parsePage()
 		var linkRegex2 = /[0-9]+/g;
 		var linkHasEditRegex = /(&amp;e=T)/;
 		
-	
-		var systemLink = targetTable.rows[x].cells[2].innerHTML;	
-		var isOpen = linkHasEditRegex.exec(targetTable.rows[x].cells[1].innerHTML);
-		isOpen = !!isOpen;
-		
-		//console.log("Stripping stage 0: " + systemLink);
-		systemLink = linkRegex.exec(systemLink);
-		//console.log("Stripping stage 1: " + systemLink);
-		systemLink = linkRegex2.exec (systemLink);
-		//console.log("Stripping stage 2: " + systemLink);
+		/*
+		ScraperColumnEditView : "Edit | View",
+		ScraperColumnTicketNumber : "Number",
+		ScraperColumnSubject : "Subject",
+		SCraperColumnPriority : "Priority",
+		ScraperColumnStatus : "Status",
+		ScraperColumnCompany : "Company",
+		ScarperColumnContact : "Contact",
+		ScraperColumnDateCreated : "Date Created",*/
+		var isOpen = true;
+		var systemLink = "";
+		var ticketID = "";
+		var ticketSubject = "";
+		var ticketStatus = "";
+		var ticketAssignee = "";
+		var ticketPriority = "";
+		var ticketCustomer = "";
+		var ticketCreatedDate = "1900-01-01 00:01"
+		for (i = 0; i < targetTable.rows[0].cells.length- 1; i++)
+		{
+			var ColumnHeader = targetTable.rows[0].cells[i].innerText;
+			ColumnHeader = ColumnHeader.replace(/[^| a-z0-9+]+/gi, '');
+
+			//ColumnHeader = ColumnHeader.substring(0, ColumnHeader.length - 1);
+
 			
-		outputObject.fAdd(
-		systemLink, //systemID
-		targetTable.rows[x].cells[2].innerText, //ticketID
-		targetTable.rows[x].cells[4].innerText, //ticketSubject = 
+			
+				
+			//console.log("inner text [" + ColumnHeader + "], test value ["+strings.ScraperColumnCompany+"]");
+				
+			//If the field displays "Edit | View", then it is editable. If it just says "View", or anything else, it is not editable and is not open.
+			if ( ColumnHeader == strings.ScraperColumnEditView) 
+			{
+				//console.log(" Found the '"+ColumnHeader +"' column");
+				isOpen = linkHasEditRegex.exec(targetTable.rows[x].cells[i].innerHTML);
+				isOpen = !!isOpen;
+			}
+			
+			
+			//Ticket system ID 
+			if ( ColumnHeader == strings.ScraperColumnTicketNumber )
+			{
+				//console.log(" Found the '"+ColumnHeader +"' column");
+				systemLink = targetTable.rows[x].cells[i].innerHTML;	
+				//console.log("Stripping stage 0: " + systemLink);
+				systemLink = linkRegex.exec(systemLink);
+				//console.log("Stripping stage 1: " + systemLink);
+				systemLink = linkRegex2.exec (systemLink);
+				//console.log("Stripping stage 2: " + systemLink);
+			
+			}
+			
+			//ticket summary / subject
+			if (ColumnHeader == strings.ScraperColumnSubject)
+			{	ticketSubject = targetTable.rows[x].cells[i].innerText;	}
 		
-		targetTable.rows[x].cells[6].innerText, //ticketStatus =
-		ticketAssignee,
-		targetTable.rows[x].cells[5].innerText, //ticketPriority =
-		"1900-01-01 00:01",
-		"0","", 999, isOpen);
+			//ticket priority
+			if (ColumnHeader == strings.ScraperColumnPriority)
+			{	ticketPriority = targetTable.rows[x].cells[i].innerText; }
+		
+			if (ColumnHeader == strings.ScraperColumnTicketNumber)
+			{	ticketID = targetTable.rows[x].cells[i].innerText; }
+		
+			if (ColumnHeader == strings.ScraperColumnStatus)
+			{	ticketStatus = targetTable.rows[x].cells[i].innerText;}
+			
+			if (ColumnHeader == strings.ScraperColumnDateCreated)	{}
+			
+			if (ColumnHeader == strings.ScraperColumnCompany)	
+			{	
+				
+				ticketCustomer = targetTable.rows[x].cells[i].innerText; 
+			}
+			
+		}
+	
+
+		outputObject.fAdd(systemLink,ticketID,ticketSubject,ticketStatus,ticketAssignee,ticketPriority,ticketCreatedDate,ticketCustomer,"",999,isOpen);
 		
 		
 		//console.log("DBG Ticket ID " + targetTable.rows[x].cells[2].innerText + " returned " + isOpen);
@@ -266,6 +314,16 @@ function loadUI()
 }
 
 
+function overrideClose (SystemID)
+{
+	outputObject.fForceClose(SystemID);
+	outputObject.fTriageById(SystemID);
+	outputObject.fSortByTriage();
+	populateUI();
+	save();
+	
+}
+
 function UpdateDate(SystemID)
 {
 	console.log("ENTERING, silver = " + outputObject.gameObject.silvers);
@@ -316,12 +374,13 @@ function triageAll()
 	outputObject.fTriageAll();
 	populateUI();
 }
+
+
 load();
-console.log("Successful load of NS JavaScript.");
 loadUI();
 
-setTimeout(function(){updateProgressBar(1,"#884")},scraperInterval);
-setTimeout(function(){parseAllPages()},scraperInterval*2);	
+setTimeout(function(){updateProgressBar(1,"#884")},settings.scraperInterval);
+setTimeout(function(){parseAllPages()},settings.scraperInterval*2);	
 
 
 
