@@ -11,7 +11,7 @@ var dbg = false;
 var extensionID;
 var perPage;
 
-function load()
+function loadFromChrome()
 {
 	
 	outputObject = createOutputObject();
@@ -45,6 +45,7 @@ function load()
 		}
 		catch (e)
 		{
+			outputObject.gameObject = {silvers : 0, golds: 0};
 			console.log(e.message);
 		}
 	}
@@ -154,11 +155,14 @@ function parsePage()
 	var targetTableRowsCount = targetTable.rows.length;
 	var targetTableColsCount = targetTable.rows[1].cells.length;
 		
+		//console.log("DBG: targetTable = ["+strings.scraperTableTarget+"], the captured value is = ["+targetTable+"]");
+		//console.log("DBG: rows = ["+targetTable.rows.length+"], cols = ["+targetTable.rows[1].cells.length+"]");
 	
 	//header rows	
 	
 	//body
-	
+	if (targetTable != undefined)
+		
 	for (x = 1; x < targetTableRowsCount -1; x++) 
 	{
 		
@@ -188,66 +192,83 @@ function parsePage()
 		var ticketPriority = "";
 		var ticketCustomer = "";
 		var ticketCreatedDate = "1900-01-01 00:01"
-		for (i = 0; i < targetTable.rows[0].cells.length- 1; i++)
+		//check each of the columns in a row
+		for (i = 0; i < targetTable.rows[0].cells.length- 1; i++) 
 		{
 			var ColumnHeader = targetTable.rows[0].cells[i].innerText;
 			ColumnHeader = ColumnHeader.replace(/[^| a-z0-9+]+/gi, '');
-
-			//ColumnHeader = ColumnHeader.substring(0, ColumnHeader.length - 1);
-
-			
-			
-				
-			//console.log("inner text [" + ColumnHeader + "], test value ["+strings.ScraperColumnCompany+"]");
-				
-			//If the field displays "Edit | View", then it is editable. If it just says "View", or anything else, it is not editable and is not open.
-			if ( ColumnHeader == strings.ScraperColumnEditView) 
+			//if ( targetTable.rows[x].cells[i].innerText != undefined)
 			{
-				//console.log(" Found the '"+ColumnHeader +"' column");
-				isOpen = linkHasEditRegex.exec(targetTable.rows[x].cells[i].innerHTML);
-				isOpen = !!isOpen;
-			}
-			
-			
-			//Ticket system ID 
-			if ( ColumnHeader == strings.ScraperColumnTicketNumber )
-			{
-				//console.log(" Found the '"+ColumnHeader +"' column");
-				systemLink = targetTable.rows[x].cells[i].innerHTML;	
-				//console.log("Stripping stage 0: " + systemLink);
-				systemLink = linkRegex.exec(systemLink);
-				//console.log("Stripping stage 1: " + systemLink);
-				systemLink = linkRegex2.exec (systemLink);
-				//console.log("Stripping stage 2: " + systemLink);
-			
-			}
-			
-			//ticket summary / subject
-			if (ColumnHeader == strings.ScraperColumnSubject)
-			{	ticketSubject = targetTable.rows[x].cells[i].innerText;	}
-		
-			//ticket priority
-			if (ColumnHeader == strings.ScraperColumnPriority)
-			{	ticketPriority = targetTable.rows[x].cells[i].innerText; }
-		
-			if (ColumnHeader == strings.ScraperColumnTicketNumber)
-			{	ticketID = targetTable.rows[x].cells[i].innerText; }
-		
-			if (ColumnHeader == strings.ScraperColumnStatus)
-			{	ticketStatus = targetTable.rows[x].cells[i].innerText;}
-			
-			if (ColumnHeader == strings.ScraperColumnDateCreated)	{}
-			
-			if (ColumnHeader == strings.ScraperColumnCompany)	
-			{	
+				//ColumnHeader = ColumnHeader.substring(0, ColumnHeader.length - 1);
+
 				
-				ticketCustomer = targetTable.rows[x].cells[i].innerText; 
-			}
+				
+					
+				//console.log("inner text [" + ColumnHeader + "], test value ["+strings.ScraperColumnCompany+"]");
+					
+				//If the field displays "Edit | View", then it is editable. If it just says "View", or anything else, it is not editable and is not open.
+				if ( ColumnHeader == strings.ScraperColumnEditView && targetTable.rows[x].cells[i].innerHTML != undefined) 
+				{
+					//console.log(" Found the '"+ColumnHeader +"' column");
+					isOpen = linkHasEditRegex.exec(targetTable.rows[x].cells[i].innerHTML);
+					isOpen = !!isOpen;
+				}
+				
+				
+				//Ticket system ID 
+				if ( ColumnHeader == strings.ScraperColumnTicketNumber && targetTable.rows[x].cells[i].innerHTML != undefined )
+				{
+					//console.log(" Found the '"+ColumnHeader +"' column");
+					systemLink = targetTable.rows[x].cells[i].innerHTML;	
+					//console.log("Stripping stage 0: " + systemLink);
+					systemLink = linkRegex.exec(systemLink);
+					//console.log("Stripping stage 1: " + systemLink);
+					systemLink = linkRegex2.exec (systemLink);
+					//console.log("Stripping stage 2: " + systemLink);
+				
+				}
+				
+				//ticket summary / subject
+				if (ColumnHeader == strings.ScraperColumnSubject)
+				{	
+					//console.log(" Found the '"+ColumnHeader +"' column");
+					ticketSubject = targetTable.rows[x].cells[i].innerText;	
+				}
 			
+				//ticket priority
+				if (ColumnHeader == strings.ScraperColumnPriority)
+				{
+					//console.log(" Found the '"+ColumnHeader +"' column");
+					ticketPriority = targetTable.rows[x].cells[i].innerText; }
+			
+				if (ColumnHeader == strings.ScraperColumnTicketNumber)
+				{	
+					//console.log(" Found the '"+ColumnHeader +"' column");
+					ticketID = targetTable.rows[x].cells[i].innerText; }
+			
+				if (ColumnHeader == strings.ScraperColumnStatus)
+				{	//console.log(" Found the '"+ColumnHeader +"' column");
+					ticketStatus = targetTable.rows[x].cells[i].innerText;
+				}
+				
+				if (ColumnHeader == strings.ScraperColumnDateCreated)	{}
+				
+				if (ColumnHeader == strings.ScraperColumnCompany)	
+				{	
+					//console.log(" Found the '"+ColumnHeader +"' column");
+					ticketCustomer = targetTable.rows[x].cells[i].innerText; 
+				}
+			}
+
 		}
-	
-
-		outputObject.fAdd(systemLink,ticketID,ticketSubject,ticketStatus,ticketAssignee,ticketPriority,ticketCreatedDate,ticketCustomer,"",999,isOpen);
+		if (systemLink != "")
+		{
+			//console.log("DBG: Invoking fAdd");
+			outputObject.fAdd(systemLink,ticketID,ticketSubject,ticketStatus,ticketAssignee,ticketPriority,ticketCreatedDate,ticketCustomer,"",999,isOpen);
+		}
+		else{
+			console.log("DBG: Failed to add an object due to garbage data");
+		}
 		
 		
 		//console.log("DBG Ticket ID " + targetTable.rows[x].cells[2].innerText + " returned " + isOpen);
@@ -258,6 +279,8 @@ function parsePage()
 		scraperOutputText += "\n";
 		
 	}
+	else
+	{Console.log("Could not find table to draw info from! Check strings.scraperTableTarget. Current value = ["+strings.scraperTableTarget+"]");}
 	//console.log(scraperOutputText);
 }
 
@@ -357,7 +380,7 @@ chrome.runtime.sendMessage(extensionID, {values: ""},
   });
 }
 
-function save()
+function saveToChrome()
 {
 	var DBGSaveValues = {values : outputObject.values,gameobject: outputObject.gameObject};
 	console.log(DBGSaveValues);
@@ -373,6 +396,22 @@ function triageAll()
 {
 	outputObject.fTriageAll();
 	populateUI();
+}
+
+function load()
+{
+	if (settings.saveToCookie == true)
+	{}
+	if (settings.saveToChrome == true)
+	{ loadFromChrome() }
+		
+}
+function save()
+{
+	if (settings.saveToCookie == true)
+	{}
+	if (settings.saveToChrome == true)
+	{ saveToChrome() }
 }
 
 

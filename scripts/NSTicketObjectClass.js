@@ -99,7 +99,7 @@ function createOutputObject()
 				if (newTriagevalue == 999) //999 is the default untriaged value. It should be -1
 				{
 					
-					console.log("DBG: Triaging a 999 value");
+					//console.log("DBG: Triaging a 999 value");
 					this.values[looplength].triagevalue = this.fTriage(this.values[looplength].isClosed, newTicketPriority, newTicketStatus, newTicketLastUpd);
 					
 				}

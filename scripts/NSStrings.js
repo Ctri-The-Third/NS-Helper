@@ -21,6 +21,8 @@ var settings = {
 		customerColumn : 15,
 		StatusLength:10,
 	},
+	saveToCookie : false,
+	saveToChrome : true,
 }
 
 

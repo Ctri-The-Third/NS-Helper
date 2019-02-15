@@ -1,10 +1,11 @@
+//outputObject.fAdd(8932853,"N5541012","test subject, please ignore","Resolved","","High","","54435786 Greenberg Traurig","",0,true);
 // Copyright 2018 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
 'use strict';
 console.log("Successful hit of ChromeLoader.js");
-  chrome.runtime.onInstalled.addListener(function() {
+  chrome.runtime.onStartup.addListener(function() {
 	  //this all happens when the addon is INTALLED
     chrome.storage.sync.set({color: '#3aa757'}, function() {
       console.log('The color is green.');
