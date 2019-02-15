@@ -36,7 +36,7 @@ console.log("Successful hit of ChromeLoader.js");
   
   chrome.runtime.onMessageExternal.addListener(
   function(request, sender, sendResponse) {
-	  //console.log("SUCCESS");
+	  console.log("Received 'save' request");
 	  
 	  chrome.storage.local.set({"NSCHJson" : JSON.stringify(request.values)});
 	  //console.log(request.values);

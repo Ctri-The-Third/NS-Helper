@@ -11,6 +11,35 @@ var dbg = false;
 var extensionID;
 var perPage;
 
+function loadFromCookie()
+{
+	outputObject = createOutputObject();
+	
+	var name = cname + "=";
+	var decodedCookie = decodeURIComponent(document.cookie);
+	var ca = decodedCookie.split(';');
+	for(var i = 0; i <ca.length; i++) 
+	{
+		var c = ca[i];
+		while (c.charAt(0) == ' ') 
+		{
+			c = c.substring(1);
+		}
+
+		if (c.indexOf("outputObject") == 0) 
+		{
+			console.log("DBG: found outputobject = "+c.substring(name.length, c.length))
+		}
+		if (c.indexOf("gameObject") == 0) 
+		{
+			console.log("DBG: found gameObject = "+ c.substring(name.length, c.length))
+		}
+	}
+  return "";
+}
+	
+}
+
 function loadFromChrome()
 {
 	
@@ -391,6 +420,20 @@ chrome.runtime.sendMessage(extensionID, {values: outputObject.values,gameobject:
   });
 
 }
+function saveToCookie()
+{
+	
+  var d = new Date();
+  d.setTime(d.getTime() + (settings.cookieCacheExpiry*24*60*60*1000));
+  var expires = "expires="+ d.toUTCString();
+  
+  var CInfo = "outputObject = " + JSON.stringify(outputObject);
+  var CGame = "gameObject = " + JSON.stringify(gameObject);
+  
+  document.cookie = CInfo +";" +CGame + ";" + expires + ";path=/";
+}
+
+
 
 function triageAll()
 {
