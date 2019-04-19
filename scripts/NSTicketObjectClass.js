@@ -325,7 +325,56 @@ function createOutputObject()
 			this.values[foundID].isClosed = true;
 			this.values[foundID].ticketLastUpd = "1900-01-01";
 			
-		}
+		},
+		fOutputToCSV : function ()
+		{
+			var outputstring = "System ID, Ticket ID, Subject, Status,  Priority, Last Updated, Customer ID, Triage Value, Is ticket closed?,\n";
+			//console.log("DBG: Triaging all!")
+			for (i = 0; i < this.values.length; i++)
+			{
+				
+				var tempstr = "";
+				tempstr = this.values[i].systemID.toString();
+				tempstr = tempstr.replace(",","") + ",";
+				outputstring += tempstr;
+				
+				
+				tempstr = this.values[i].ticketID.toString();
+				tempstr = tempstr.replace(",","") + ",";
+				outputstring += tempstr;
+				
+				tempstr = this.values[i].ticketSubject.toString();
+				tempstr = tempstr.replace(",","") + ",";
+				outputstring += tempstr;
+				
+				tempstr = this.values[i].ticketStatus.toString();
+				tempstr = tempstr.replace(",","") + ",";
+				outputstring += tempstr;
+				
+				outputstring + ","
+				
+				tempstr = this.values[i].ticketPriority.toString();
+				tempstr = tempstr.replace(",","") + ",";
+				outputstring += tempstr;
+
+				outputstring += this.values[i].ticketLastUpd +",";
+				
+				tempstr = this.values[i].ticketCusID.toString();
+				tempstr = tempstr.replace(",","") + ",";
+				outputstring += tempstr;
+				
+				outputstring += this.values[i].triagevalue +",";
+				
+				outputstring += this.values[i].isClosed +",";
+
+				outputstring += "\n";
+				
+			}
+			console.log(outputstring);
+				
+			
+			
+		},
 			
 			
 		

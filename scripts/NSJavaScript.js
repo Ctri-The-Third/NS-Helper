@@ -15,11 +15,12 @@ function loadFromCookie()
 {
 	outputObject = createOutputObject();
 	
-	var name = cname + "=";
+	
 	var decodedCookie = decodeURIComponent(document.cookie);
 	var ca = decodedCookie.split(';');
 	for(var i = 0; i <ca.length; i++) 
 	{
+		console.log("DBG: Cookie segment = "+c);
 		var c = ca[i];
 		while (c.charAt(0) == ' ') 
 		{
@@ -35,10 +36,10 @@ function loadFromCookie()
 			console.log("DBG: found gameObject = "+ c.substring(name.length, c.length))
 		}
 	}
-  return "";
+  
 }
 	
-}
+
 
 function loadFromChrome()
 {
@@ -224,8 +225,13 @@ function parsePage()
 		//check each of the columns in a row
 		for (i = 0; i < targetTable.rows[0].cells.length- 1; i++) 
 		{
+			
 			var ColumnHeader = targetTable.rows[0].cells[i].innerText;
 			ColumnHeader = ColumnHeader.replace(/[^| a-z0-9+]+/gi, '');
+			
+			
+			console.log ("ColumnHeader = [" + ColumnHeader + "], from ["+targetTable.rows[0].cells[i].innerText+"]");
+			
 			//if ( targetTable.rows[x].cells[i].innerText != undefined)
 			{
 				//ColumnHeader = ColumnHeader.substring(0, ColumnHeader.length - 1);
@@ -242,10 +248,10 @@ function parsePage()
 					isOpen = linkHasEditRegex.exec(targetTable.rows[x].cells[i].innerHTML);
 					isOpen = !!isOpen;
 				}
-				
+
 				
 				//Ticket system ID 
-				if ( ColumnHeader == strings.ScraperColumnTicketNumber && targetTable.rows[x].cells[i].innerHTML != undefined )
+				if ( ColumnHeader == strings.ScraperColumnTicketNumber )//&& targetTable.rows[x].cells[i].innerHTML != undefined )
 				{
 					//console.log(" Found the '"+ColumnHeader +"' column");
 					systemLink = targetTable.rows[x].cells[i].innerHTML;	
@@ -427,8 +433,8 @@ function saveToCookie()
   d.setTime(d.getTime() + (settings.cookieCacheExpiry*24*60*60*1000));
   var expires = "expires="+ d.toUTCString();
   
-  var CInfo = "outputObject = " + JSON.stringify(outputObject);
-  var CGame = "gameObject = " + JSON.stringify(gameObject);
+  var CInfo = "outputObject = " + JSON.stringify(outputObject.values);
+  var CGame = "gameObject = " + JSON.stringify(outputObject.gameObject);
   
   document.cookie = CInfo +";" +CGame + ";" + expires + ";path=/";
 }

@@ -9,13 +9,13 @@
     },
 	"content_scripts": 
 	[{  	
-		"matches":["https://system.na2.netsuite.com/app/center/card.nl?sc=-17*"],
+		"matches":["https://3370076.app.netsuite.com/app/center/card.nl?sc=-17*"],
 		"js": ["scripts/ChromeContentScriptLoader.js"],
 		"run_at": "document_idle",
 		"all_frames": true
 	}],
 	"externally_connectable" : {
-		"matches" : ["https://system.na2.netsuite.com/app/center/card.nl?sc=-17*"]
+		"matches" : ["https://3370076.app.netsuite.com/app/center/card.nl?sc=-17*"]
 	},
 	"web_accessible_resources": [
 		"scripts/NSJavaScript.js",
